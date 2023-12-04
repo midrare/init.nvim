@@ -33,7 +33,13 @@ require("user.vimopts").setup()
 require("user.keybinds").setup()
 
 bootstrap_package_manager()
-require("lazy").setup("plugins")
+
+require("lazy").setup({
+  { "midrare/hookspace.nvim", branch = 'dev', dev = true },
+  { import = "plugins" },
+}, {
+  dev = { path = "~/Projects" }
+})
 
 if config.colorscheme then
   vim.cmd('colorscheme ' .. config.colorscheme)
