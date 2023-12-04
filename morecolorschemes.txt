@@ -1,0 +1,11 @@
+tlhr/anderson.vim
+rakr/vim-one
+NLKNguyen/papercolor-theme
+shaunsingh/nord.nvim
+mhartington/oceanic-next
+jacoborus/tender.vim
+nanotech/jellybeans.vim
+AlessandroYorba/Alduin
+danilo-augusto/vim-afterglow
+AlessandroYorba/Sierra
+jonathanfilip/vim-lucius
