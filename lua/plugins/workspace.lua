@@ -57,10 +57,7 @@ return {
   {
     'midrare/hookspace.nvim',
     event = "VeryLazy",
-    branch = 'dev',
-
-    config = function(m, opts)
-      local _, hookspace = pcall(require, 'hookspace')
+    opts = function(m, opts)
       local _, cwd = pcall(require, 'hookspace.hooks.cwd')
       local _, env = pcall(require, 'hookspace.hooks.environment')
       local _, trailblazer = pcall(require, 'hookspace.hooks.environment')
@@ -88,6 +85,10 @@ return {
         end
       end
 
+      opts.autoload = true
+      opts.on_open = opts.on_open or {}
+      opts.on_close = opts.on_close or {}
+
       table.insert(opts.on_open, env and env.on_open)
       table.insert(opts.on_open, runterm_on_open)
       table.insert(opts.on_open, lsp and lsp.on_open)
@@ -102,10 +103,5 @@ return {
       table.insert(opts.on_close, runterm_on_close)
       table.insert(opts.on_close, env and env.on_close)
     end,
-    opts = {
-      autoload = true,
-      on_open = {},
-      on_close = {},
-    }
   }
 }
