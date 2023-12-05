@@ -14,16 +14,21 @@ config.keymaps.n = config.keymaps.n or {}
 config.keymaps.x = config.keymaps.x or {}
 config.keymaps.n['<leader>g'] = {
   label = 'files',
-  cmd = '<cmd>Telescope find_files<cr>',
+  cmd = function()
+    require('telescope.builtin').find_files()
+  end
 }
 config.keymaps.n['<leader>G'] = {
   label = 'grep',
-  cmd = '<cmd>Telescope live_grep<cr>',
+  cmd = function()
+    require('telescope.builtin').live_grep()
+  end
 }
 
 return {
   'nvim-telescope/telescope.nvim',
   lazy = true,
+  cmd = { 'Telescope' },
   dependencies = {
     { 'nvim-lua/plenary.nvim', lazy = true },
     { 'nvim-telescope/telescope-fzf-native.nvim', lazy = true },
