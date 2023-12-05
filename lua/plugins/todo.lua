@@ -8,7 +8,7 @@ config.keymaps.n['<leader>i'] = {
   label = 'todo',
   cmd = function()
     require("todo-comments")
-    vim.cmd('<cmd>TodoLocList<cr>')
+    vim.cmd('TodoLocList')
   end
 }
 
