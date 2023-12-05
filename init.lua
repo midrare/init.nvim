@@ -38,7 +38,7 @@ require("lazy").setup({
   { "midrare/hookspace.nvim", branch = 'dev', dev = true },
   { import = "plugins" },
 }, {
-  dev = { path = "~/Projects" },
+  dev = { path = "~/Projects", fallback = true },
   git = { timeout = 300 },
 })
 
