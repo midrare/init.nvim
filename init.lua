@@ -38,7 +38,8 @@ require("lazy").setup({
   { "midrare/hookspace.nvim", branch = 'dev', dev = true },
   { import = "plugins" },
 }, {
-  dev = { path = "~/Projects" }
+  dev = { path = "~/Projects" },
+  git = { timeout = 300 },
 })
 
 if config.colorscheme then
