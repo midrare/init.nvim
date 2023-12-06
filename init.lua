@@ -41,6 +41,7 @@ require("lazy").setup({
 }, {
   dev = { path = "~/Projects", fallback = true },
   git = { timeout = 300 },
+  change_detection = { enabled = false, notify = false },
 })
 
 if config.colorscheme then
