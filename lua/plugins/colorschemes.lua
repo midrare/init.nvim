@@ -29,7 +29,6 @@ return {
   { 'Everblush/everblush.vim', priority = 1000, lazy = true },
   { 'fenetikm/falcon', priority = 1000, lazy = true },
   { 'lunarvim/darkplus.nvim', priority = 1000, lazy = true },
-  { 'samueljoli/cyberpunk.nvim', priority = 1000, lazy = true },
   { 'akai54/2077.nvim', priority = 1000, lazy = true },
   {
     'pineapplegiant/spaceduck',
