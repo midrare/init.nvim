@@ -64,15 +64,15 @@ return {
     name = 'catppuccin',
     priority = 1000,
     lazy = true,
-    config = function(m, opts)
+    init = function(m)
       vim.g.catppuccin_flavour = 'mocha'
-      require("catppuccin").setup({
-        integrations = {
-          nvimtree = { show_root = true },
-          lsp_trouble = true,
-          which_key = true,
-        },
-      })
-    end
+    end,
+    opts = {
+      integrations = {
+        nvimtree = { show_root = true },
+        lsp_trouble = true,
+        which_key = true,
+      },
+    }
   },
 }
