@@ -65,7 +65,7 @@ local default = {
     '.bzr', '.git', '.hg', '.root', '.svn', '_darcs', 'package.json',
   },
   ignored_filetypes = {
-    'NvimTree', 'neo-tree', 'aerial', 'Outline', 'quickfix', 'qf', 'prompt',
+    'NvimTree', 'neo-tree', 'aerial', 'Outline', 'quickfix', 'qf', 'prompt', "SidebarNvim",
   },
   ignored_buftypes = {},
   quickfix = {
