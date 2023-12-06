@@ -10,56 +10,46 @@ config.keymaps.n = config.keymaps.n or {}
 
 config.keymaps.n['[b'] = {
   cmd = function()
-    require("bufferline").cycle(-1)
+    require("cokeline.mappings").by_step("focus", -1)
   end,
   label = 'previous buffer',
+  repeatable = true,
 }
 
 config.keymaps.n[']b'] = {
   cmd = function()
-    require("bufferline").cycle(1)
+    require("cokeline.mappings").by_step("focus", 1)
   end,
   label = 'next buffer',
+  repeatable = true,
 }
 
 config.keymaps.n['[B'] = {
   cmd = function()
-    require("bufferline").go_to(1)
+    require("cokeline.mappings").by_step("switch", -1)
   end,
-  label = 'first buffer',
+  label = 'prev buffer pos',
+  repeatable = true,
 }
 
 config.keymaps.n[']B'] = {
   cmd = function()
-    require("bufferline").go_to(-1)
+    require("cokeline.mappings").by_step("switch", 1)
   end,
-  label = 'last buffer',
+  label = 'next buffer pos',
+  repeatable = true,
 }
 
 
 return {
   {
-    'akinsho/bufferline.nvim',
+    "willothy/nvim-cokeline",
     event = 'VimEnter',
-    dependencies = 'kyazdani42/nvim-web-devicons',
-    opts = {
-      options = {
-        custom_filter = function(bufnr, bufnrs)
-          local buf = vim.bo[bufnr]
-          if
-            not buf
-            or vim.tbl_contains(config.ignored_filetypes, buf.filetype)
-          then
-            return false
-          end
-          return true
-        end,
-      },
-    }
-  },
-  {
-    'tiagovla/scope.nvim',
-    priority = 100,
-    opts = { restore_state = true }
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "kyazdani42/nvim-web-devicons",
+      "stevearc/resession.nvim",
+    },
+    config = true,
   }
 }
