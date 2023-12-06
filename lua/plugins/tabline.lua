@@ -1,9 +1,5 @@
 local config = require("user.config")
 config.ignored_filetypes = config.ignored_filetypes or {}
-config.telescope = config.telescope or {}
-config.telescope.extensions = config.telescope.extensions or {}
-table.insert(config.telescope.extensions, 'scope')
-
 
 config.keymaps = config.keymaps or {}
 config.keymaps.n = config.keymaps.n or {}
@@ -50,6 +46,16 @@ return {
       "kyazdani42/nvim-web-devicons",
       "stevearc/resession.nvim",
     },
+    config = true,
+  },
+  {
+    "tiagovla/scope.nvim",
+    init = function(m)
+      local config = require("user.config")
+      config.telescope = config.telescope or {}
+      config.telescope.extensions = config.telescope.extensions or {}
+      table.insert(config.telescope.extensions, 'scope')
+    end,
     config = true,
   }
 }
