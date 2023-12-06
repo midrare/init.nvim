@@ -14,28 +14,23 @@ local function delete_current_buffer(force)
   end
 end
 
-local normal = {
-  noremap = true,
-  silent = true,
-  callback = delete_current_buffer,
-}
+local normal = function()
+  delete_current_buffer()
+end
 
-local force = {
-  noremap = true,
-  silent = true,
-  callback = function()
-    delete_current_buffer(true)
-  end,
-}
+local force = function()
+  delete_current_buffer(true)
+end
 
 return {
   'kazhala/close-buffers.nvim',
   lazy = true,
+  cmd = { "BD", "BDelete" },
   config = true,
   keys = {
-    { '<C-w>e', normal, desc = 'close' },
-    { '<C-w><C-e>', normal, desc = 'close' },
-    { '<C-w>E', force, desc = 'force close' },
-    { '<C-w><C-E>', force, desc = 'force close' },
+    { '<C-w>e', normal, desc = 'close', noremap = true, silent = true },
+    { '<C-w><C-e>', normal, desc = 'close', noremap = true, silent = true },
+    { '<C-w>E', force, desc = 'force close', noremap = true, silent = true },
+    { '<C-w><C-E>', force, desc = 'force close', noremap = true, silent = true },
   }
 }
