@@ -283,10 +283,10 @@ return {
             config.lsp.on_init[name]
           )
 
-        require("mason").setup(opts)
         require('lspconfig')[name].setup(conf)
       end
 
+      require("mason").setup(opts)
       require('mason-lspconfig').setup({
         ensure_installed = config.lsp.ensure_installed,
         handlers = { handler },
