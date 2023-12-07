@@ -1,31 +1,26 @@
-local config = require('user.config')
-
-config.keymaps = config.keymaps or {}
-config.keymaps.n = config.keymaps.n or {}
-config.keymaps.x = config.keymaps.x or {}
-
-config.lsp = config.lsp or {}
-config.lsp.before_init = config.lsp.before_init or {}
-config.lsp.on_init = config.lsp.on_init or {}
-config.lsp.on_attach = config.lsp.on_attach or {}
-config.lsp.server_config = config.lsp.server_config or {}
-config.lsp.server_config['*'] = config.lsp.server_config['*'] or {}
-
-table.insert(config.lsp.server_config['*'], function(lspcfg)
-  local autocmp_ok, autocmp = pcall(require, 'cmp_nvim_lsp')
-  if autocmp_ok and autocmp then
-    lspcfg.capabilities = vim.tbl_deep_extend(
-      'keep',
-      lspcfg.capabilities,
-      autocmp.default_capabilities()
-    )
-  end
-end)
-
 return {
   {
     'hrsh7th/nvim-cmp',
     event = 'VeryLazy',
+    init = function(m)
+      local config = require('user.config')
+
+      config.lsp = config.lsp or {}
+      config.lsp.before_init = config.lsp.before_init or {}
+      config.lsp.on_init = config.lsp.on_init or {}
+      config.lsp.on_attach = config.lsp.on_attach or {}
+      config.lsp.server_config = config.lsp.server_config or {}
+      config.lsp.server_config['*'] = config.lsp.server_config['*'] or {}
+
+      table.insert(config.lsp.server_config['*'], function(lspcfg, name)
+        local autocmp_ok, autocmp = pcall(require, 'cmp_nvim_lsp')
+        if autocmp_ok and autocmp then
+          return vim.tbl_deep_extend("force", lspcfg, {
+            capabilities = autocmp.default_capabilities()
+          })
+        end
+      end)
+    end,
     opts = function(m, opts)
       local function scroll(count)
         local cmp = require('cmp')
