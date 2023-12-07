@@ -2,7 +2,7 @@ return {
   {
     'nvim-lualine/lualine.nvim',
     event = 'VimEnter',
-    dependencies = { 'kyazdani42/nvim-web-devicons', lazy = true },
+    dependencies = { 'kyazdani42/nvim-web-devicons' },
     opts = {
       sections = {
         lualine_a = { 'mode' },

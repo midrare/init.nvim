@@ -311,7 +311,7 @@ return {
   {
     'RishabhRD/nvim-lsputils',
     event = "VeryLazy",
-    dependencies = { 'RishabhRD/popfix', lazy = true },
+    dependencies = { 'RishabhRD/popfix' },
     config = function(m, opts)
       vim.lsp.handlers['textDocument/codeAction'] =
         require('lsputil.codeAction').code_action_handler

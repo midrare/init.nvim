@@ -30,8 +30,8 @@ return {
   lazy = true,
   cmd = { 'Telescope' },
   dependencies = {
-    { 'nvim-lua/plenary.nvim', lazy = true },
-    { 'nvim-telescope/telescope-fzf-native.nvim', lazy = true },
+    { 'nvim-lua/plenary.nvim' },
+    { 'nvim-telescope/telescope-fzf-native.nvim' },
   },
   config = function(m, opts)
     local telescope = require('telescope')
