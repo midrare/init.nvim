@@ -23,7 +23,7 @@ return {
       end
     }
     config.keymaps.n['<C-w>E'] = {
-      label = 'force',
+      label = 'force close',
       repeatable = true,
       cmd = function()
         require('close_buffers').delete({ type = 'this', force = true })
