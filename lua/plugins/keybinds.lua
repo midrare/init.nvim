@@ -56,7 +56,8 @@ local function enqueue_keymap(mode, input, map)
         .. ' '
         .. 'mapping:'
         .. vim.inspect(map),
-      vim.log.levels.WARN,
+      -- split to hide from to-do list plugin
+      vim.log.levels['WA' .. 'RN'],
       { title = modulename }
     )
   else
