@@ -264,7 +264,10 @@ return {
             config.lsp.server_config[name],
           }))
         do
-          transform(conf, name)
+          local r = transform(conf, name)
+          if r then
+            conf = r
+          end
         end
 
         local on_attach = conf.on_attach
