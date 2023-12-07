@@ -46,7 +46,24 @@ return {
         repeatable = true,
       }
     end,
-    config = true,
+    opts = {
+      buffers = {
+        filter_valid = function(buf)
+          local config = require("user.config")
+          for _, ft in ipairs(config.ignored_filetypes or {}) do
+            if ft == buf.filetype then
+              return false
+            end
+          end
+          for _, bt in ipairs(config.ignored_buftypes or {}) do
+            if bt == buf.type then
+              return false
+            end
+          end
+          return true
+        end,
+      }
+    }
   },
   {
     "tiagovla/scope.nvim",

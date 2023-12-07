@@ -31,6 +31,11 @@ return {
           end})
         end,
       }
+
+      config.ignored_filetypes = config.ignored_filetypes or {}
+      config.ignored_buftypes = config.ignored_buftypes or {}
+      table.insert(config.ignored_filetypes, 'qf')
+      table.insert(config.ignored_buftypes, 'quickfix')
     end,
     config = true,
   },
