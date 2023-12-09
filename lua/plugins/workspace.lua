@@ -1,32 +1,3 @@
-local config = require("user.config")
-
-config.keymaps = config.keymaps or {}
-config.keymaps.n = config.keymaps.n or {}
-config.keymaps.x = config.keymaps.x or {}
-
-config.keymaps.n['<leader>p'] = {
-  label = 'workspaces',
-  cmd = '<cmd>Telescope hookspace<cr>',
-}
-
-config.telescope = config.telescope or {}
-config.telescope.extensions = config.telescope.extensions or {}
-table.insert(config.telescope.extensions, 'hookspace')
-
-
-local runterm_config = nil
-
-config.lsp = config.lsp or {}
-config.lsp.on_init = config.lsp.on_init or {}
-config.lsp.on_init['*'] = config.lsp.on_init['*'] or {}
-table.insert(config.lsp.on_init['*'], function(...)
-  local _, lsp = pcall(require, 'hookspace.hooks.lspconfig')
-  if lsp then
-    lsp.server_init((unpack or table.unpack)(...))
-  end
-end)
-
-
 local function read_json(file)
   if vim.fn.filereadable(file) <= 0 then
     return nil
@@ -53,10 +24,38 @@ local function read_json(file)
 end
 
 
+local runterm_config = nil
+
 return {
   {
     'midrare/hookspace.nvim',
     event = "VeryLazy",
+    init = function(m)
+      local config = require("user.config")
+
+      config.keymaps = config.keymaps or {}
+      config.keymaps.n = config.keymaps.n or {}
+      config.keymaps.x = config.keymaps.x or {}
+
+      config.keymaps.n['<leader>p'] = {
+        label = 'workspaces',
+        cmd = '<cmd>Telescope hookspace<cr>',
+      }
+
+      config.telescope = config.telescope or {}
+      config.telescope.extensions = config.telescope.extensions or {}
+      table.insert(config.telescope.extensions, 'hookspace')
+
+      config.lsp = config.lsp or {}
+      config.lsp.on_init = config.lsp.on_init or {}
+      config.lsp.on_init['*'] = config.lsp.on_init['*'] or {}
+      table.insert(config.lsp.on_init['*'], function(...)
+        local _, lsp = pcall(require, 'hookspace.hooks.lspconfig')
+        if lsp then
+          lsp.server_init((unpack or table.unpack)(...))
+        end
+      end)
+    end,
     opts = function(m, opts)
       local _, cwd = pcall(require, 'hookspace.hooks.cwd')
       local _, env = pcall(require, 'hookspace.hooks.environment')
