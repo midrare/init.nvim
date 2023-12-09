@@ -45,6 +45,22 @@ return {
         label = 'next buffer pos',
         repeatable = true,
       }
+
+      config.keymaps.n['<C-w>e'] = {
+        label = 'close buffer',
+        repeatable = true,
+        cmd = function()
+          require("cokeline.mappings").by_step("close", 0)
+        end
+      }
+      config.keymaps.n['<C-w><C-e>'] = {
+        label = 'close buffer',
+        repeatable = true,
+        hidden = true,
+        cmd = function()
+          require("cokeline.mappings").by_step("close", 0)
+        end
+      }
     end,
     opts = {
       buffers = {
