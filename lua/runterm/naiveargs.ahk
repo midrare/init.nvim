@@ -1,4 +1,4 @@
-; naiveargparse.ahk
+; naiveargs.ahk
 ; an argument parser for autohotkey
 
 ; Copyright (c) 2023 midrare

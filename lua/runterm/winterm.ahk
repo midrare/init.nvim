@@ -1,7 +1,7 @@
 #Requires AutoHotKey >=2.0
 #NoTrayIcon
 
-#include "%A_ScriptDir%/naiveargparse.ahk"
+#include "%A_ScriptDir%/naiveargs.ahk"
 
 global WINDOWS_TERMINAL_START_DELAY_MS := 500
 global WINDOWS_TERMINAL_POLL_MS := 250
