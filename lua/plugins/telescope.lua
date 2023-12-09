@@ -30,8 +30,8 @@ return {
   lazy = true,
   cmd = { 'Telescope' },
   dependencies = {
-    { 'nvim-lua/plenary.nvim', lazy = true },
-    { 'nvim-telescope/telescope-fzf-native.nvim', lazy = true },
+    { 'nvim-lua/plenary.nvim' },
+    { 'nvim-telescope/telescope-fzf-native.nvim' },
   },
   config = function(m, opts)
     local telescope = require('telescope')
@@ -47,8 +47,8 @@ return {
         local status_ok, errmsg = pcall(telescope.load_extension, extension)
         if not status_ok then
           local msg = 'Failed to load telescope extension "'
-            .. tostring(extension)
-            .. '"'
+          .. tostring(extension)
+          .. '"'
           vim.notify(msg, vim.log.levels.ERROR, { title = modulename })
           if errmsg and #errmsg > 0 then
             vim.notify(errmsg, vim.log.levels.TRACE, { title = modulename })

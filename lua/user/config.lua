@@ -67,7 +67,7 @@ local default = {
   ignored_filetypes = {
     'NvimTree', 'neo-tree', 'aerial', 'Outline', 'quickfix', 'qf', 'prompt', "SidebarNvim",
   },
-  ignored_buftypes = {},
+  ignored_buftypes = { 'quickfix' },
   quickfix = {
     cmd = {},
   },

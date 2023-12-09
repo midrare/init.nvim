@@ -7,7 +7,6 @@ return {
       "kyazdani42/nvim-web-devicons",
       "stevearc/resession.nvim",
     },
-    config = true,
     init = function(m)
       local config = require("user.config")
       config.ignored_filetypes = config.ignored_filetypes or {}
@@ -47,6 +46,24 @@ return {
         repeatable = true,
       }
     end,
+    opts = {
+      buffers = {
+        filter_valid = function(buf)
+          local config = require("user.config")
+          for _, ft in ipairs(config.ignored_filetypes or {}) do
+            if ft == buf.filetype then
+              return false
+            end
+          end
+          for _, bt in ipairs(config.ignored_buftypes or {}) do
+            if bt == buf.type then
+              return false
+            end
+          end
+          return true
+        end,
+      }
+    }
   },
   {
     "tiagovla/scope.nvim",

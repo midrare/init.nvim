@@ -12,8 +12,6 @@ function prequire(plugin)
 end
 
 
-local config = require('user.config')
-
 local function bootstrap_package_manager()
   local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
   if not vim.loop.fs_stat(lazypath) then
@@ -44,9 +42,12 @@ require("lazy").setup({
   change_detection = { enabled = false, notify = false },
 })
 
+
+local config = require('user.config')
 if config.colorscheme then
   vim.cmd('colorscheme ' .. config.colorscheme)
 end
+
 
 -- "https://github.com/neovim/neovim/issues/16646
 -- "let &shell = ""C:/Program Files/nu/bin/nu.exe""

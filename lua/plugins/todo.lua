@@ -17,7 +17,7 @@ return {
   {
     'folke/todo-comments.nvim',
     event = "VeryLazy",
-    dependencies = { 'nvim-lua/plenary.nvim', lazy = true },
+    dependencies = { 'nvim-lua/plenary.nvim' },
     opts = {
       highlight = { pattern = [[.*<(KEYWORDS)>]] },
       search = { pattern = [[\b(KEYWORDS)\b]] },

@@ -1,41 +1,42 @@
-local function delete_current_buffer(force)
-  if vim.fn.exists(':BDelete') then
-    if force == nil or not force then
-      vim.cmd([[BDelete this]])
-    else
-      vim.cmd([[BDelete! this]])
-    end
-  else
-    if force == nil or not force then
-      vim.cmd([[bdelete]])
-    else
-      vim.cmd([[bdelete!]])
-    end
-  end
-end
-
-local normal = {
-  noremap = true,
-  silent = true,
-  callback = delete_current_buffer,
-}
-
-local force = {
-  noremap = true,
-  silent = true,
-  callback = function()
-    delete_current_buffer(true)
-  end,
-}
-
 return {
   'kazhala/close-buffers.nvim',
   lazy = true,
+  cmd = { "BD", "BDelete" },
+  init = function(m)
+    local config = require("user.config")
+    config.keymaps = config.keymaps or {}
+    config.keymaps.n = config.keymaps.n or {}
+    config.keymaps.x = config.keymaps.x or {}
+    config.keymaps.n['<C-w>e'] = {
+      label = 'close',
+      repeatable = true,
+      cmd = function()
+        require('close_buffers').delete({ type = 'this' })
+      end
+    }
+    config.keymaps.n['<C-w><C-e>'] = {
+      label = 'close',
+      repeatable = true,
+      hidden = true,
+      cmd = function()
+        require('close_buffers').delete({ type = 'this' })
+      end
+    }
+    config.keymaps.n['<C-w>E'] = {
+      label = 'force close',
+      repeatable = true,
+      cmd = function()
+        require('close_buffers').delete({ type = 'this', force = true })
+      end
+    }
+    config.keymaps.n['<C-w><C-E>'] = {
+      label = 'force close',
+      repeatable = true,
+      hidden = true,
+      cmd = function()
+        require('close_buffers').delete({ type = 'this', force = true })
+      end
+    }
+  end,
   config = true,
-  keys = {
-    { '<C-w>e', normal, desc = 'close' },
-    { '<C-w><C-e>', normal, desc = 'close' },
-    { '<C-w>E', force, desc = 'force close' },
-    { '<C-w><C-E>', force, desc = 'force close' },
-  }
 }

@@ -1,34 +1,26 @@
-local config = require("user.config")
-
-config.keymaps = config.keymaps or {}
-config.keymaps.n = config.keymaps.n or {}
-config.keymaps.x = config.keymaps.x or {}
-
-
-config.lsp = config.lsp or {}
-config.lsp.before_init = config.lsp.before_init or {}
-config.lsp.on_init = config.lsp.on_init or {}
-config.lsp.on_attach = config.lsp.on_attach or {}
-config.lsp.server_config = config.lsp.server_config or {}
-config.lsp.server_config['*'] = config.lsp.server_config['*'] or {}
-
-table.insert(config.lsp.server_config['*'], function(lspcfg)
-  local autocmp_ok, autocmp = pcall(require, 'cmp_nvim_lsp')
-  if autocmp_ok and autocmp then
-    lspcfg.capabilities =
-      vim.tbl_deep_extend(
-        'keep',
-        lspcfg.capabilities,
-        autocmp.default_capabilities()
-      )
-  end
-end)
-
-
 return {
   {
     'hrsh7th/nvim-cmp',
-    event = "VeryLazy",
+    event = 'VeryLazy',
+    init = function(m)
+      local config = require('user.config')
+
+      config.lsp = config.lsp or {}
+      config.lsp.before_init = config.lsp.before_init or {}
+      config.lsp.on_init = config.lsp.on_init or {}
+      config.lsp.on_attach = config.lsp.on_attach or {}
+      config.lsp.server_config = config.lsp.server_config or {}
+      config.lsp.server_config['*'] = config.lsp.server_config['*'] or {}
+
+      table.insert(config.lsp.server_config['*'], function(lspcfg, name)
+        local autocmp_ok, autocmp = pcall(require, 'cmp_nvim_lsp')
+        if autocmp_ok and autocmp then
+          return vim.tbl_deep_extend("force", lspcfg, {
+            capabilities = autocmp.default_capabilities()
+          })
+        end
+      end)
+    end,
     opts = function(m, opts)
       local function scroll(count)
         local cmp = require('cmp')
@@ -37,9 +29,9 @@ return {
             cmp.select_next_item()
           end
           if count >= 0 then
-            cmp.select_next_item({count = count})
+            cmp.select_next_item({ count = count })
           else
-            cmp.select_prev_item({count = -count})
+            cmp.select_prev_item({ count = -count })
           end
         else
           cmp.scroll_docs(count)
@@ -47,8 +39,9 @@ return {
       end
 
       local has_words_before = function()
-        local line, col =
-          (unpack or table.unpack)(vim.api.nvim_win_get_cursor(0))
+        local line, col = (unpack or table.unpack)(
+          vim.api.nvim_win_get_cursor(0)
+        )
         return col ~= 0
           and (
             vim.api
@@ -89,10 +82,18 @@ return {
           }),
         },
         mapping = cmp.mapping.preset.insert({
-          ['<c-b>'] = cmp.mapping(function(fallback) scroll(-16) end),
-          ['<c-f>'] = cmp.mapping(function(fallback) scroll(16) end),
-          ['<c-u>'] = cmp.mapping(function(fallback) scroll(-8) end),
-          ['<c-d>'] = cmp.mapping(function(fallback) scroll(8) end),
+          ['<c-b>'] = cmp.mapping(function(fallback)
+            scroll(-16)
+          end),
+          ['<c-f>'] = cmp.mapping(function(fallback)
+            scroll(16)
+          end),
+          ['<c-u>'] = cmp.mapping(function(fallback)
+            scroll(-8)
+          end),
+          ['<c-d>'] = cmp.mapping(function(fallback)
+            scroll(8)
+          end),
           ['<c-spc>'] = cmp.mapping.complete(),
           ['<c-e>'] = cmp.mapping.abort(),
           ['<esc>'] = cmp.mapping(function(fallback)
@@ -125,23 +126,23 @@ return {
               fallback()
             end
           end, { 'i', 's' }),
-        })
+        }),
       }
     end,
   },
   dependencies = {
-    { 'hrsh7th/cmp-buffer', lazy = true },
-    { 'hrsh7th/cmp-path', lazy = true },
-    { 'hrsh7th/cmp-cmdline', lazy = true },
-    { 'hrsh7th/cmp-nvim-lsp', lazy = true },
-    { 'onsails/lspkind.nvim', lazy = true },
+    { 'hrsh7th/cmp-buffer' },
+    { 'hrsh7th/cmp-path' },
+    { 'hrsh7th/cmp-cmdline' },
+    { 'hrsh7th/cmp-nvim-lsp' },
+    { 'onsails/lspkind.nvim' },
   },
   {
     'L3MON4D3/LuaSnip',
     lazy = true,
-    dependencies = { 'rafamadriz/friendly-snippets', lazy = true },
+    dependencies = { 'rafamadriz/friendly-snippets' },
     config = function(m, opts)
       require('luasnip.loaders.from_vscode').lazy_load()
-    end
+    end,
   },
 }

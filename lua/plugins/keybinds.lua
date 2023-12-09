@@ -9,7 +9,7 @@ local hydra_cmds = {}
 ---@field silent? boolean defaults to true
 ---@field repeatable? boolean defaults to false
 
-local function split(input)
+local function parse_keypresses(input)
   local components = {}
   while true do
     local m = input:match('^<[^<>]->')
@@ -27,7 +27,7 @@ end
 ---@param mode string
 ---@param input string
 ---@param map keymap
-local function add_keymap(mode, input, map)
+local function enqueue_keymap(mode, input, map)
   if map.cmd == 0 then
     return
   end
@@ -36,21 +36,16 @@ local function add_keymap(mode, input, map)
   local key = 0
 
   if map.cmd then
-    local path = split(input)
-    key = path[#path]
-    table.remove(path, #path)
-    prefix = #path > 0 and table.concat(path) or ''
+    local keypresses = parse_keypresses(input)
+    key = keypresses[#keypresses]
+    table.remove(keypresses, #keypresses)
+    prefix = #keypresses > 0 and table.concat(keypresses) or ''
   end
 
-  local m = cmds
-  if map.repeatable then
-    m = hydra_cmds
-  end
+  cmds[mode] = cmds[mode] or {}
+  cmds[mode][prefix] = cmds[mode][prefix] or {}
 
-  m[mode] = m[mode] or {}
-  m[mode][prefix] = m[mode][prefix] or {}
-
-  if m[mode][prefix][key] then
+  if cmds[mode][prefix][key] then
     vim.notify(
       'Duplicate keymap '
         .. 'mode:'
@@ -61,15 +56,25 @@ local function add_keymap(mode, input, map)
         .. ' '
         .. 'mapping:'
         .. vim.inspect(map),
-      vim.log.levels.WARN,
+      -- split to hide from to-do list plugin
+      vim.log.levels['WA' .. 'RN'],
       { title = modulename }
     )
   else
-    m[mode][prefix][key] = map
+    if not map.repeatable then
+      cmds[mode][prefix][key] = vim.tbl_extend("force", {}, map)
+    else
+      cmds[mode][prefix][key] = vim.tbl_extend("force", {}, map)
+      cmds[mode][prefix][key].cmd = nil
+
+      hydra_cmds[mode] = hydra_cmds[mode] or {}
+      hydra_cmds[mode][prefix] = hydra_cmds[mode][prefix] or {}
+      hydra_cmds[mode][prefix][key] = vim.tbl_extend("force", {}, map)
+    end
   end
 end
 
-local function foreach(m, f)
+local function foreach_keymap(m, f)
   for mode, prefixes in pairs(m) do
     for prefix, keymaps in pairs(prefixes) do
       for key, mapping in pairs(keymaps) do
@@ -81,7 +86,7 @@ end
 
 
 local _initialized_cmds = false
-local function init_cmds()
+local function enqueue_keymaps()
   if _initialized_cmds then
     return
   end
@@ -89,7 +94,7 @@ local function init_cmds()
   local config = require("user.config")
   for mode, inputs in pairs((config or {}).keymaps or {}) do
     for input, map in pairs(inputs) do
-      add_keymap(mode, input, map)
+      enqueue_keymap(mode, input, map)
     end
   end
 
@@ -122,11 +127,11 @@ return {
       icons = { separator = '→' },
     },
     config = function(m, opts)
-      init_cmds()
+      enqueue_keymaps()
 
       local whichkey = require("which-key")
       whichkey.setup(opts)
-      foreach(cmds, function(mode, prefix, key, map)
+      foreach_keymap(cmds, function(mode, prefix, key, map)
         if key == 0 and whichkey then
           whichkey.register({ [prefix] = { name = map.label } }, {
             mode = mode,
@@ -136,22 +141,30 @@ return {
             expr = map.expr == true,
           })
         elseif key ~= 0 and whichkey then
-          whichkey.register(
-            {
-              [key] = {
-                map.cmd or map.label or nil,
-                map.cmd and map.label or nil,
-              },
-            },
-            {
-              mode = mode,
-              prefix = prefix,
-              silent = map.silent ~= false,
-              nowait = map.nowait ~= false,
-              noremap = map.noremap ~= false,
-              expr = map.expr == true,
-            }
-          )
+          local bind = {}
+          if not map.cmd and not map.hidden then
+            bind = { map.label }
+          elseif map.cmd and map.hidden then
+            bind = { map.cmd, "which_key_ignore" }
+          elseif map.cmd and not map.hidden then
+            bind = { map.cmd, map.label }
+          elseif not map.cmd and map.hidden then
+            bind = {}
+          end
+
+          if bind then
+            whichkey.register(
+              { [key] = bind },
+              {
+                mode = mode,
+                prefix = prefix,
+                silent = map.silent ~= false,
+                nowait = map.nowait ~= false,
+                noremap = map.noremap ~= false,
+                expr = map.expr == true,
+              }
+            )
+          end
         elseif key ~= 0 then
           local opts = vim.deepcopy(map)
           opts.silent = map.silent ~= false
@@ -167,12 +180,12 @@ return {
     'anuvyklack/hydra.nvim',
     event = "VeryLazy",
     config = function(m, opts)
-      init_cmds()
+      enqueue_keymaps()
 
       local hydra = require("hydra")
       local hydras = {}
 
-      foreach(hydra_cmds, function(mode, prefix, key, map)
+      foreach_keymap(hydra_cmds, function(mode, prefix, key, map)
         hydras[mode] = hydras[mode] or {}
         hydras[mode][prefix] = hydras[mode][prefix]
           or vim.deepcopy(((hydra_cmds[mode] or {})[prefix] or {})[0] or {})

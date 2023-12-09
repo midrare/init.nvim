@@ -264,7 +264,10 @@ return {
             config.lsp.server_config[name],
           }))
         do
-          transform(conf, name)
+          local r = transform(conf, name)
+          if r then
+            conf = r
+          end
         end
 
         local on_attach = conf.on_attach
@@ -311,7 +314,7 @@ return {
   {
     'RishabhRD/nvim-lsputils',
     event = "VeryLazy",
-    dependencies = { 'RishabhRD/popfix', lazy = true },
+    dependencies = { 'RishabhRD/popfix' },
     config = function(m, opts)
       vim.lsp.handlers['textDocument/codeAction'] =
         require('lsputil.codeAction').code_action_handler
