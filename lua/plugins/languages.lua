@@ -96,7 +96,7 @@ local specs = {
 
 if not vim.g.vscode or vim.g.vscode == '' or vim.g.vscode == 0 then
   -- language pack for Vim
-  table.insert(specs, { 'sheerun/vim-polyglot' })
+  table.insert(specs, { 'sheerun/vim-polyglot', event = "VeryLazy" })
 end
 
 return specs
