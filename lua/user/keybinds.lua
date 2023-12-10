@@ -1,9 +1,8 @@
 local modulename, _ = ...
 local M = {}
 
-M.after_features = { '*' }
-M.provides_features = { 'key-binds' }
-
+local is_macro_recording = false
+local macro_reg = 'm'
 
 M.setup = function()
   local config = require("user.config")
@@ -92,6 +91,30 @@ M.setup = function()
           endif
         endif
       ]])
+    end,
+  }
+
+  config.keymaps.n['q'] = {
+    label = 'playback',
+    cmd = function()
+      local cnt = vim.v.count
+      if cnt <= 0 then
+        vim.cmd.normal({ "@" .. macro_reg, bang = true })
+      else
+        vim.cmd.normal({ vim.v.count1 .. "@" .. macro_reg, bang = true })
+      end
+    end,
+  }
+  config.keymaps.n['Q'] = {
+    label = 'record',
+    cmd = function()
+      if not is_macro_recording then
+        vim.cmd.normal({ "q" .. macro_reg, bang = true })
+        is_macro_recording = true
+      else
+        vim.cmd.normal({ "q", bang = true })
+        is_macro_recording = false
+      end
     end,
   }
 end
