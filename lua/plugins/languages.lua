@@ -3,8 +3,14 @@ vim.g.polyglot_disabled = vim.list_extend(
   { 'c', 'cpp', 'markdown', 'norg', 'lua', 'ftdetect' })
 
 local specs = {
-  { 'dylon/vim-antlr', lazy = true },
-  { 'bfrg/vim-cpp-modern', lazy = true },
+  {
+    'dylon/vim-antlr',
+    event = "VeryLazy",
+  },
+  {
+    'bfrg/vim-cpp-modern',
+    event = "VeryLazy",
+  },
   {
     'LhKipp/nvim-nu',
     event = "VeryLazy",
