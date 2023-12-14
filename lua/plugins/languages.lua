@@ -12,9 +12,8 @@ local specs = {
     event = "VeryLazy",
   },
   {
-    'LhKipp/nvim-nu',
+    'elkasztano/nushell-syntax-vim',
     event = "VeryLazy",
-    config = true,
   },
   {
     'nvim-treesitter/nvim-treesitter',
