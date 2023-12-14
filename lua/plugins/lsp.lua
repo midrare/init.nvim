@@ -344,7 +344,7 @@ return {
     }
   },
   {
-    'jose-elias-alvarez/null-ls.nvim',
+    'nvimtools/none-ls.nvim',
     event = "VeryLazy",
     dependencies = 'nvim-lua/plenary.nvim',
     opts = function(m, opts)
