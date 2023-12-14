@@ -5,7 +5,11 @@ vim.g.polyglot_disabled = vim.list_extend(
 local specs = {
   { 'dylon/vim-antlr', lazy = true },
   { 'bfrg/vim-cpp-modern', lazy = true },
-  { 'ErichDonGubler/vim-nushell', lazy = true },
+  {
+    'LhKipp/nvim-nu',
+    event = "VeryLazy",
+    config = true,
+  },
   {
     'nvim-treesitter/nvim-treesitter',
     event = "VeryLazy",
@@ -35,6 +39,7 @@ local specs = {
         'latex',
         'lua',
         'make',
+        'nu',
         'ninja',
         'norg',
         'ocaml',
