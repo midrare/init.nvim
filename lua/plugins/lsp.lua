@@ -239,18 +239,10 @@ end
 return {
   {
     'williamboman/mason.nvim',
-    lazy = true,
+    -- lazy loading is not recommended for mason.nvim
     dependencies = {
       'williamboman/mason-lspconfig.nvim',
       'neovim/nvim-lspconfig',
-    },
-    cmd = {
-      "Mason",
-      "MasonUpdate",
-      "MasonInstall",
-      "MasonUninstall",
-      "MasonUninstallAll",
-      "MasonLog",
     },
     config = function(m, opts)
       local function handler(name)
