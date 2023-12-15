@@ -330,7 +330,7 @@ return {
   },
   {
     'folke/neodev.nvim',
-    event = "VeryLazy",
+    priority = 100,
     opts = {
       library = { plugins = { "nvim-dap-ui" }, types = true },
     }
