@@ -33,9 +33,6 @@ local default = {
   filetree = {
     cmd = {},
   },
-  fileoverview = {
-    cmd = {},
-  },
   formatter = {
     cmd = {},
   },
