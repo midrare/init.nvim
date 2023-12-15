@@ -245,6 +245,14 @@ return {
       'neovim/nvim-lspconfig',
     },
     config = function(m, opts)
+      local config = require("user.config")
+
+      config.lsp = config.lsp or {}
+      config.lsp.before_init = config.lsp.before_init or {}
+      config.lsp.on_init = config.lsp.on_init or {}
+      config.lsp.on_attach = config.lsp.on_attach or {}
+      config.lsp.server_config = config.lsp.server_config or {}
+
       local function handler(name)
         local conf = {
           capabilities = vim.lsp.protocol.make_client_capabilities(),
