@@ -1,26 +1,6 @@
 return {
   {
     'hrsh7th/nvim-cmp',
-    event = 'VeryLazy',
-    init = function(m)
-      local config = require('user.config')
-
-      config.lsp = config.lsp or {}
-      config.lsp.before_init = config.lsp.before_init or {}
-      config.lsp.on_init = config.lsp.on_init or {}
-      config.lsp.on_attach = config.lsp.on_attach or {}
-      config.lsp.server_config = config.lsp.server_config or {}
-      config.lsp.server_config['*'] = config.lsp.server_config['*'] or {}
-
-      table.insert(config.lsp.server_config['*'], function(lspcfg, name)
-        local autocmp_ok, autocmp = pcall(require, 'cmp_nvim_lsp')
-        if autocmp_ok and autocmp then
-          return vim.tbl_deep_extend("force", lspcfg, {
-            capabilities = autocmp.default_capabilities()
-          })
-        end
-      end)
-    end,
     opts = function(m, opts)
       local function scroll(count)
         local cmp = require('cmp')
@@ -134,7 +114,6 @@ return {
     { 'hrsh7th/cmp-buffer' },
     { 'hrsh7th/cmp-path' },
     { 'hrsh7th/cmp-cmdline' },
-    { 'hrsh7th/cmp-nvim-lsp' },
     { 'onsails/lspkind.nvim' },
   },
   {
@@ -143,6 +122,26 @@ return {
     dependencies = { 'rafamadriz/friendly-snippets' },
     config = function(m, opts)
       require('luasnip.loaders.from_vscode').lazy_load()
+    end,
+  },
+  {
+    'hrsh7th/cmp-nvim-lsp',
+    priority = 200,
+    init = function(m)
+      local config = require('user.config')
+
+      config.lsp = config.lsp or {}
+      config.lsp.before_init = config.lsp.before_init or {}
+      config.lsp.on_init = config.lsp.on_init or {}
+      config.lsp.on_attach = config.lsp.on_attach or {}
+      config.lsp.server_config = config.lsp.server_config or {}
+      config.lsp.server_config['*'] = config.lsp.server_config['*'] or {}
+
+      table.insert(config.lsp.server_config['*'], function(lspcfg, name)
+        return vim.tbl_deep_extend("force", lspcfg, {
+          capabilities = require('cmp_nvim_lsp').default_capabilities()
+        })
+      end)
     end,
   },
 }
