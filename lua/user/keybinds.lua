@@ -59,7 +59,7 @@ M.setup = function()
     cmd = vim.lsp.buf.type_definition,
   }
 
-  config.keymaps.n['<c-space>'] = {
+  config.keymaps.n['<c-tab>'] = {
     label = 'file jump',
     cmd = function()
       require('quickjump').choose()
