@@ -56,7 +56,7 @@ return {
         json = { require('formatter.filetypes.json').prettier },
         html = { require('formatter.filetypes.html').prettier },
         lua = { require('formatter.filetypes.lua').stylua },
-        python = { require('formatter.filetypes.python').black },
+        python = { require('formatter.filetypes.python').yapf },
         rust = { require('formatter.filetypes.rust').rustfmt },
         sh = { require('formatter.filetypes.sh').shfmt },
         toml = { require('formatter.filetypes.toml').taplo },
