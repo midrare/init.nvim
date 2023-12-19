@@ -1,23 +1,20 @@
 vim.g.polyglot_disabled = vim.list_extend(
   vim.g.polyglot_disabled or {},
-  { 'c', 'cpp', 'markdown', 'norg', 'lua', 'ftdetect' })
+  { 'c', 'cpp', 'markdown', 'norg', 'lua', 'ftdetect' }
+)
 
 local specs = {
   {
     'dylon/vim-antlr',
-    event = "VeryLazy",
   },
   {
     'bfrg/vim-cpp-modern',
-    event = "VeryLazy",
   },
   {
     'elkasztano/nushell-syntax-vim',
-    event = "VeryLazy",
   },
   {
     'nvim-treesitter/nvim-treesitter',
-    event = "VeryLazy",
     config = function(m, opts)
       require('nvim-treesitter.configs').setup(opts)
     end,
@@ -67,12 +64,11 @@ local specs = {
       indent = { enable = true },
       highlight = { enable = true, additional_vim_regex_highlighting = true },
       matchup = { enable = true, include_match_words = true },
-    }
+    },
   },
-  { 'nvim-treesitter/nvim-treesitter-textobjects', event = "VeryLazy" },
+  { 'nvim-treesitter/nvim-treesitter-textobjects' },
   {
     'tpope/vim-markdown',
-    event = "VeryLazy",
     config = function(m, opts)
       vim.cmd([[
         augroup markdown_formatoptions
@@ -80,14 +76,13 @@ local specs = {
         autocmd BufEnter,BufRead,BufNewFile *.md setlocal formatoptions-=tc
         augroup END
       ]])
-    end
+    end,
   },
   {
     'nvim-neorg/neorg',
-    event = "VeryLazy",
     dependencies = 'nvim-lua/plenary.nvim',
     config = function(m, opts)
-      require("neorg").setup(opts)
+      require('neorg').setup(opts)
       -- https://github.com/nvim-lua/plenary.nvim#plenaryfiletype
       require('plenary.filetype').add_file('norg')
     end,
@@ -100,13 +95,13 @@ local specs = {
         ['core.qol.toc'] = {},
         ['core.export'] = {},
       },
-    }
+    },
   },
 }
 
 if not vim.g.vscode or vim.g.vscode == '' or vim.g.vscode == 0 then
   -- language pack for Vim
-  table.insert(specs, { 'sheerun/vim-polyglot', event = "VeryLazy" })
+  table.insert(specs, { 'sheerun/vim-polyglot' })
 end
 
 return specs
