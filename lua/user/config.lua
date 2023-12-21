@@ -17,29 +17,7 @@ end
 
 
 local default = {
-  asterisk = {
-    cmd = {},
-  },
   colorscheme = nil,
-  commenter = {
-    cmd = {},
-  },
-  edit = {
-    cmd = {},
-  },
-  exploder = {
-    cmd = {},
-  },
-  filetree = {
-    cmd = {},
-  },
-  formatter = {
-    cmd = {},
-  },
-  greeter = { cmd = {} },
-  jump = {
-    cmd = {},
-  },
   keymaps = {
     n = {
       ['<leader>ro'] = {
@@ -55,9 +33,6 @@ local default = {
     ensure_installed = {},
     server_config = { ['*'] = {} },
   },
-  taskrunner = {
-    cmd = {},
-  },
   root_markers = {
     '.bzr', '.git', '.hg', '.root', '.svn', '_darcs', 'package.json',
   },
@@ -65,24 +40,8 @@ local default = {
     'NvimTree', 'neo-tree', 'aerial', 'Outline', 'quickfix', 'qf', 'prompt', "SidebarNvim",
   },
   ignored_buftypes = { 'quickfix' },
-  quickfix = {
-    cmd = {},
-  },
-  tabline = {
-    cmd = {},
-    ignored_filetypes = {},
-  },
-  telescope = {
-    cmd = {},
-    extensions = {},
-  },
-  terminal = {
-    cmd = {},
-    exe = get_term_exe(),
-  },
-  workspace = {
-    cmd = {},
-  },
+  telescope = { extensions = {} },
+  terminal = { exe = get_term_exe() },
 }
 
 
