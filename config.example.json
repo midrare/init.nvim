@@ -1,4 +1,5 @@
 {
     "guifont": "monospace:h10",
-    "colorscheme": "default"
+    "colorscheme": "default",
+    "max_downloads": -1
 }

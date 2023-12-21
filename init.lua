@@ -11,44 +11,48 @@ function prequire(plugin)
   return mod or {}
 end
 
-
 local function bootstrap_package_manager()
-  local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+  local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
   if not vim.loop.fs_stat(lazypath) then
     vim.fn.system({
-      "git",
-      "clone",
-      "--filter=blob:none",
-      "https://github.com/folke/lazy.nvim.git",
-      "--branch=stable", -- latest stable release
+      'git',
+      'clone',
+      '--filter=blob:none',
+      'https://github.com/folke/lazy.nvim.git',
+      '--branch=stable', -- latest stable release
       lazypath,
     })
   end
   vim.opt.rtp:prepend(lazypath)
 end
 
-require("user.vimopts").setup()
-require("user.keybinds").setup()
+local config = require('user.config')
+
+require('user.vimopts').setup()
+require('user.keybinds').setup()
 
 bootstrap_package_manager()
 
-require("lazy").setup({
-  { "midrare/hookspace.nvim", branch = 'dev', dev = true },
-  { "midrare/microkasten.nvim", branch = 'dev', dev = true },
-  { "chrisgrieser/nvim-recorder", branch = 'dev', dev = true },
-  { import = "plugins" },
+require('lazy').setup({
+  { 'midrare/hookspace.nvim', branch = 'dev', dev = true },
+  { 'midrare/microkasten.nvim', branch = 'dev', dev = true },
+  { 'chrisgrieser/nvim-recorder', branch = 'dev', dev = true },
+  { import = 'plugins' },
 }, {
-  dev = { path = "~/Projects", fallback = true },
+  dev = { path = '~/Projects', fallback = true },
   git = { timeout = 300 },
   change_detection = { enabled = false, notify = false },
+  concurrency = (
+    config
+    and config.max_downloads
+    and config.max_downloads >= 1
+    and config.max_downloads
+  ) or nil,
 })
 
-
-local config = require('user.config')
 if config.colorscheme then
   vim.cmd('colorscheme ' .. config.colorscheme)
 end
-
 
 -- "https://github.com/neovim/neovim/issues/16646
 -- "let &shell = ""C:/Program Files/nu/bin/nu.exe""

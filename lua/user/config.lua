@@ -42,6 +42,7 @@ local default = {
   ignored_buftypes = { 'quickfix' },
   telescope = { extensions = {} },
   terminal = { exe = get_term_exe() },
+  max_downloads = -1,
 }
 
 
