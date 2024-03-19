@@ -124,7 +124,7 @@ return {
     'rcarriga/nvim-dap-ui',
     event = "VeryLazy",
     config = true,
-    dependencies = { 'mfussenegger/nvim-dap' },
+    dependencies = { 'mfussenegger/nvim-dap', 'nvim-neotest/nvim-nio' },
   },
   {
     'theHamsta/nvim-dap-virtual-text',
