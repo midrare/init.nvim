@@ -1,6 +1,6 @@
 vim.g.neo_tree_remove_legacy_commands = 1
 
-local config = require("user.config")
+local config = require('user.config')
 
 config.keymaps = config.keymaps or {}
 config.keymaps.n = config.keymaps.n or {}
@@ -10,7 +10,7 @@ config.keymaps.n['<leader>f'] = {
   label = 'file tree',
   cmd = function()
     require('nvim-tree.api').tree.focus()
-  end
+  end,
 }
 
 config.filetree = config.filetree or {}
@@ -50,6 +50,6 @@ return {
       on_attach = function(bufnr)
         require('nvim-tree.api').config.mappings.default_on_attach(bufnr)
       end,
-    }
-  }
+    },
+  },
 }
