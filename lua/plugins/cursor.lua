@@ -9,5 +9,6 @@ return {
     'ggandor/flit.nvim',
     event = 'VeryLazy',
     config = true,
+    dependencies = { 'tpope/vim-repeat' },
   }
 }
