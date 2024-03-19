@@ -46,7 +46,7 @@ return {
           },
         },
       },
-      filters = { dotfiles = true },
+      filters = { dotfiles = true, custom = { '__pycache__' } },
       on_attach = function(bufnr)
         require('nvim-tree.api').config.mappings.default_on_attach(bufnr)
       end,
