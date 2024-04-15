@@ -41,7 +41,6 @@ local specs = {
         'latex',
         'lua',
         'make',
-        'nu',
         'ninja',
         'norg',
         'ocaml',
