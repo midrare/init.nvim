@@ -79,7 +79,12 @@ local specs = {
   },
   {
     'nvim-neorg/neorg',
-    dependencies = 'nvim-lua/plenary.nvim',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'vhyrro/luarocks.nvim',
+      'nvim-neorg/lua-utils.nvim',
+      'pysan3/pathlib.nvim',
+    },
     config = function(m, opts)
       require('neorg').setup(opts)
       -- https://github.com/nvim-lua/plenary.nvim#plenaryfiletype
