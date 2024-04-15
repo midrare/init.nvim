@@ -47,22 +47,21 @@ end
 if not vim.g.gui_initialized then
   vim.g.gui_initialized = true
 
-  local guifont = "monospace:h10"
-  local user_config_file = vim.fn.stdpath("config")
-    .. path_sep .. "config.json"
-  local user_config = read_json(user_config_file)
-  if user_config and user_config.guifont then
-    guifont = user_config.guifont
-  end
+  local config = vim.tbl_deep_extend(
+    'force',
+    { guifont = "monospace:h10" },
+    read_json(vim.fn.stdpath("config") .. path_sep .. "config.json") or {},
+    read_json(vim.fn.stdpath("data") .. path_sep .. "config.json") or {}
+  )
 
   if is_nvim_dir(vim.fn.getcwd(-1, -1)) then
     vim.cmd("cd ~")
   end
 
   if vim.fn.exists(":GuiFont") > 0 then
-    vim.cmd("silent! GuiFont! " .. vim.fn.escape(guifont, " "))
+    vim.cmd("silent! GuiFont! " .. vim.fn.escape(config.guifont, " "))
   else
-    vim.cmd("silent! set guifont=" .. vim.fn.escape(guifont, " "))
+    vim.cmd("silent! set guifont=" .. vim.fn.escape(config.guifont, " "))
   end
 
   if vim.fn.exists(":GuiPopupmenu") > 0 then
