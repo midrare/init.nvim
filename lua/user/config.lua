@@ -16,7 +16,7 @@ local function get_term_exe()
 end
 
 
-local default = {
+local base = {
   colorscheme = nil,
   keymaps = {
     n = {
@@ -73,9 +73,14 @@ local function read_json(file)
 end
 
 
-local file = vim.fn.stdpath('config') .. '/' .. 'config.json'
-local config = {}
+local bundled = vim.fn.stdpath('config') .. '/' .. 'config.json'
+local user = vim.fn.stdpath('data') .. '/' .. 'config.json'
 
-config = vim.tbl_deep_extend('force', default, read_json(file) or {})
+local config = vim.tbl_deep_extend(
+  'force',
+  base,
+  read_json(bundled) or {},
+  read_json(user) or {}
+)
 
 return config
