@@ -16,36 +16,6 @@ return {
   'mhartington/formatter.nvim',
   lazy = true,
   opts = function(m, opts)
-    -- https://github.com/mhartington/formatter.nvim/issues/235
-    vim.notify('formatter-nvim monkey-patch applied. (has bug been fixed yet?)')
-    local patch_clangformat_bug = function(f)
-      local o = f()
-      if o.args and type(o.args) == 'table' then
-        local new_args = {}
-        local skip = false
-        for i, v in ipairs(o.args) do
-          if skip then
-            skip = false
-          elseif
-            v == '-assume-filename'
-            and (o.args[i + 1] == "''" or o.args[i + 1] == '""')
-          then
-            skip = true
-          elseif type(v) ~= 'string' or not v:find('^-style=') then
-            table.insert(new_args, v)
-          end
-        end
-        o.args = new_args
-      end
-      return o
-    end
-
-    local for_each = function(f, o)
-      for k, v in pairs(o) do
-        o[k] = f(v)
-      end
-    end
-
     opts = {
       filetype = {
         c = { require('formatter.filetypes.c').clangformat },
@@ -64,10 +34,6 @@ return {
         zig = { require('formatter.filetypes.zig').zigfmt },
       },
     }
-
-    opts.filetype.c = for_each(patch_clangformat_bug, opts.filetype.c)
-    opts.filetype.cpp = for_each(patch_clangformat_bug, opts.filetype.cpp)
-    opts.filetype.java = for_each(patch_clangformat_bug, opts.filetype.java)
 
     return opts
   end
