@@ -1,3 +1,4 @@
 [submodule "lua/luamisc"]
 	path = lua/luamisc
-	url = git@github.com:midrare/luamisc.git
+	url = https://github.com/midrare/luamisc.git
+	pushurl = git@github.com:midrare/luamisc.git
