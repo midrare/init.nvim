@@ -164,7 +164,7 @@ return {
           if #elided > max_len then
             local basename = paths.basename(elided)
             local dirname = paths.dirname(elided)
-            local extension = paths.fileext(elided)
+            local extension = paths.fileext(elided) or ''
             local stub = basename:sub(1, #basename - #extension)
 
             elided = dirname
