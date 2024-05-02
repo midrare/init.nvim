@@ -1,22 +1,33 @@
+local modulename, _ = ...
+
 vim.g.polyglot_disabled = vim.list_extend(
   vim.g.polyglot_disabled or {},
   { 'c', 'cpp', 'markdown', 'norg', 'lua', 'ftdetect' }
 )
 
+
 local specs = {
-  {
-    'dylon/vim-antlr',
-  },
-  {
-    'bfrg/vim-cpp-modern',
-  },
-  {
-    'elkasztano/nushell-syntax-vim',
-  },
+  { 'dylon/vim-antlr' },
+  { 'bfrg/vim-cpp-modern' },
+  { 'elkasztano/nushell-syntax-vim' },
   {
     'nvim-treesitter/nvim-treesitter',
     config = function(m, opts)
       require('nvim-treesitter.configs').setup(opts)
+      -- WARN https://github.com/nvim-treesitter/nvim-treesitter/issues/3092
+      for _, p in ipairs(vim.api.nvim_get_runtime_file('parser/vim.dll', true)) do
+        if p:match(".*[\\/]lib[\\/]nvim[\\/]parser[\\/].*") then
+          vim.notify(
+            "tree-sitter parsers found at " .. p:gsub("[\\/][^\\/]+$", "") .. ". "
+            .. "Consider deleting them to avoid an issue with duplicate parsers "
+            .. "in tree-sitter. "
+            .. "https://github.com/nvim-treesitter/nvim-treesitter/issues/3092",
+            vim.log.levels.WARN,
+            { title = modulename }
+          )
+          break
+        end
+      end
     end,
     opts = {
       ensure_installed = {
