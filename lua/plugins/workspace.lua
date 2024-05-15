@@ -62,6 +62,7 @@ return {
       local _, trailblazer = pcall(require, 'hookspace.hooks.environment')
       local _, session = pcall(require, 'hookspace.hooks.session')
       local _, lsp = pcall(require, 'hookspace.hooks.lspconfig')
+      local _, formatter = pcall(require, 'hookspace.hooks.formatter')
 
       local function runterm_on_open(workspace)
         local runterm_ok, runterm = pcall(require, 'runterm')
@@ -92,10 +93,12 @@ return {
       table.insert(opts.on_open, runterm_on_open)
       table.insert(opts.on_open, lsp and lsp.on_open)
       table.insert(opts.on_open, trailblazer and trailblazer.on_open)
+      table.insert(opts.on_open, formatter and formatter.on_open)
       table.insert(opts.on_open, session and session.on_open)
       table.insert(opts.on_open, cwd and cwd.on_open)
 
       table.insert(opts.on_close, trailblazer and trailblazer.on_close)
+      table.insert(opts.on_close, formatter and formatter.on_close)
       table.insert(opts.on_close, session and session.on_close)
       table.insert(opts.on_close, cwd and cwd.on_close)
       table.insert(opts.on_close, lsp and lsp.on_close)
