@@ -26,6 +26,8 @@ vim.api.nvim_put()
 vim.api.nvim_buf_delete()
 vim.api.nvim_buf_is_valid()
 
+vim.bo.filetype
+
 *Reminder: vim.fn functions return ints, which are always truthy in lua.*
 
 vim.fn.bufnr('$')
