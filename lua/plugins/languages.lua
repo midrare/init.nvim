@@ -106,7 +106,6 @@ local specs = {
         ['core.defaults'] = {},
         ['core.dirman'] = {},
         ['core.concealer'] = {},
-        ['core.manoeuvre'] = {},
         ['core.qol.toc'] = {},
         ['core.export'] = {},
       },
