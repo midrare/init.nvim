@@ -52,7 +52,7 @@ return {
       table.insert(config.lsp.on_init['*'], function(...)
         local _, lsp = pcall(require, 'hookspace.hooks.lspconfig')
         if lsp then
-          lsp.server_init((unpack or table.unpack)(...))
+          lsp.server_init(...)
         end
       end)
     end,
