@@ -24,6 +24,12 @@ config.keymaps.n['<leader>G'] = {
     require('telescope.builtin').live_grep()
   end
 }
+config.keymaps.n['<leader>b'] = {
+  label = 'buffers',
+  cmd = function()
+    require('telescope.builtin').buffers()
+  end
+}
 
 return {
   'nvim-telescope/telescope.nvim',

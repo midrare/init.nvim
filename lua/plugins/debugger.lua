@@ -4,60 +4,60 @@ config.keymaps = config.keymaps or {}
 config.keymaps.n = config.keymaps.n or {}
 config.keymaps.x = config.keymaps.x or {}
 
-config.keymaps.n['<leader>b'] = {
+config.keymaps.n['<leader>d'] = {
   label = 'debug',
 }
 
-config.keymaps.n['<leader>bb'] = {
+config.keymaps.n['<leader>db'] = {
   label = 'breakpoint',
   cmd = function()
     require('dap').toggle_breakpoint()
   end,
 }
-config.keymaps.n['<leader>bB'] = {
+config.keymaps.n['<leader>dB'] = {
   label = 'logpoint',
   cmd = function()
     require('dap').toggle_breakpoint(nil, nil,
       vim.fn.input('Log point message: '))
   end,
 }
-config.keymaps.n['<leader>bc'] = {
+config.keymaps.n['<leader>dc'] = {
   label = 'continue',
   cmd = function()
     require('dap').continue()
   end,
 }
-config.keymaps.n['<leader>bo'] = {
+config.keymaps.n['<leader>do'] = {
   label = 'step over',
   cmd = function()
     require('dap').step_over()
   end,
 }
-config.keymaps.n['<leader>bi'] = {
+config.keymaps.n['<leader>di'] = {
   label = 'step into',
   cmd = function()
     require('dap').step_into()
   end,
 }
-config.keymaps.n['<leader>bu'] = {
+config.keymaps.n['<leader>du'] = {
   label = 'step out',
   cmd = function()
     require('dap').step_out()
   end,
 }
-config.keymaps.n['<leader>bp'] = {
+config.keymaps.n['<leader>dp'] = {
   label = 'inspect',
   cmd = function()
     require('dap').repl.open()
   end,
 }
-config.keymaps.n['<leader>br'] = {
+config.keymaps.n['<leader>dr'] = {
   label = 're-run',
   cmd = function()
     require('dap').run_last()
   end,
 }
-config.keymaps.n['<leader>bm'] = {
+config.keymaps.n['<leader>dm'] = {
   label = 'debugger ui',
   cmd = function()
     require('dapui').toggle()
