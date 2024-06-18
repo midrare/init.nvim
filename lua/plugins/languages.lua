@@ -68,6 +68,7 @@ local specs = {
         'toml',
         'typescript',
         'vim',
+        'vimdoc',
         'yaml',
         'zig',
       },
