@@ -62,7 +62,7 @@ M.setup = function()
   config.keymaps.n['<c-tab>'] = {
     label = 'file jump',
     cmd = function()
-      require('quickjump').choose()
+      require("other-nvim").open()
     end,
   }
 
