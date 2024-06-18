@@ -138,22 +138,18 @@ RunInWindowsTerminal(TermPid, Command) {
 }
 
 
-Args := NaiveParseArguments(A_Args)
-OpenDir := A_WorkingDir
-
-If (Args.GetParam("open-in-dir") && StrLen(Args.GetParam("open-in-dir")) > 0) {
-    OpenDir := Args.GetParam("open-in-dir")
-}
+Args := ParseArguments(A_Args)
+OpenDir := Args.Param("open-in-dir", A_WorkingDir)
 
 TermPid := -1
 
-If (TermPid < 0 && Args.GetParam("reuse-pid")) {
-    If (WinExist("ahk_pid " . Args.GetParam("reuse-pid")) > 0x0) {
-        TermPid := Args.GetParam("reuse-pid")
+If (TermPid < 0 && Args.Param("reuse-pid")) {
+    If (WinExist("ahk_pid " . Args.Param("reuse-pid")) > 0x0) {
+        TermPid := Args.Param("reuse-pid")
     }
 }
 
-If (TermPid < 0 && Args.GetCount("reuse-scan") > 0) {
+If (TermPid < 0 && Args.Count("reuse-scan") > 0) {
     Try {
         TermPid := WinGetPid("ahk_exe " . WINDOWS_TERMINAL_EXE)
         If (!TermPid || TermPid < 0) {
@@ -166,26 +162,25 @@ If (TermPid < 0 && Args.GetCount("reuse-scan") > 0) {
 
 If (TermPid < 0) {
     TermPid := OpenWindowsTerminal(OpenDir,
-        Args.GetParam("open-with-profile"),
-        Args.GetParam("open-with-cmd"))
+        Args.Param("open-with-profile"),
+        Args.Param("open-with-cmd"))
 }
 
 If (TermPid >= 0) {
-    If (Args.GetRemaining().Length > 0) {
-        If (Args.GetParam("run-in-dir")
-                && StrLen(Args.GetParam("run-in-dir") > 0)) {
+    If (Args.Remaining.Length > 0) {
+        If (Args.Param("run-in-dir")) {
             SendWindowsTerminalCmds(TermPid, [ ("cd '"
-                . Args.GetParam("run-in-dir") . "'"),
+                . Args.Param("run-in-dir") . "'"),
                 "cls; clear" ])
         }
-        RunInWindowsTerminal(TermPid, Args.GetRemaining())
+        RunInWindowsTerminal(TermPid, Args.Remaining)
     } Else {
         ActivateWindowsTerminal(TermPid)
     }
 }
 
-If (Args.GetParam("ini-out") && StrLen(Args.GetParam("ini-out")) > 0) {
-    OutPath := RegExReplace(Args.GetParam("ini-out"), "[\\/]+", "\")
+If (Args.Param("ini-out")) {
+    OutPath := RegExReplace(Args.Param("ini-out"), "[\\/]+", "\")
 
     TempName := Random()
     TempName := A_Temp . "\" . "runterm-" . Floor(TempName) . ".tmp"

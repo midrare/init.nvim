@@ -1,7 +1,8 @@
 ; naiveargs.ahk
-; an argument parser for autohotkey
+; An argument parser for autohotkey
+; Last modified: 2024/06/18
 
-; Copyright (c) 2023 midrare
+; Copyright (c) 2024 midrare <midrare9@gmail.com>
 ;
 ; Permission is hereby granted, free of charge, to any person obtaining a copy
 ; of this software and associated documentation files (the "Software"), to deal
@@ -22,47 +23,57 @@
 ; SOFTWARE.
 
 
+#Requires AutoHotkey >=2.0
+
 Class NaiveArguments {
     __New(Positionals, Named, Counted, Remaining) {
-        this.Positionals := Positionals
-        this.NameToValue := Named
-        this.NameToCount := Counted
-        this.Remaining := Remaining
+        this.Positionals := Positionals || Array()
+        this.Remaining := Remaining || Array()
+        this._NameToValues := Named || Map()
+        this._NameToCount := Counted || Map()
     }
 
-    GetPositionals() {
-        Return this.Positionals
-    }
-
-    GetRemaining() {
-        Return this.Remaining
-    }
-
-    GetCount(Name) {
-        If (!this.NameToCount.Has(Name)) {
+    Count(Name) {
+        If (!this._NameToCount.Has(Name)) {
             Return 0
         }
-        Return this.NameToCount[Name]
+        Return this._NameToCount[Name]
     }
 
-    GetParam(Name) {
-        If (!this.NameToValue.Has(Name)) {
-            Return
+    Param(Name, Default_ := "") {
+        If (!this._NameToValues.Has(Name)
+        || this._NameToValues[Name].Length <= 0) {
+            If (IsSet(Default_)) {
+                Return Default_
+            }
+            Throw UnsetItemError("Param " . Name . " not found.")
         }
-        Return this.NameToValue[Name]
+        Return this._NameToValues[Name][1]
+    }
+
+    Params(Name, Default_ := Array()) {
+        If (!this._NameToValues.Has(Name)) {
+            If (IsSet(Default_)) {
+                Return Default_
+            }
+            Throw UnsetItemError("Param " . Name . " not found.")
+        }
+        Return this._NameToValues[Name]
     }
 }
 
 
-NaiveParseArguments(Args) {
+ParseArguments(Args) {
     Args_ := Args.Clone()
 
     PHASE_POSITIONAL := 0
     PHASE_FLAGS := 1
     PHASE_REMAINING := 2
+    RE_PREFIX_EQ := "^(?!--$)(?:--?|/)([^:=]+)[:=](.+)"
+    RE_PREFIX := "^(?!--$)(?:--?|/)(.+)"
 
     Positionals := Array()
-    NameToValue := Map()
+    NameToValues := Map()
     NameToCount := Map()
     Remaining := Array()
 
@@ -80,36 +91,39 @@ NaiveParseArguments(Args) {
         }
 
         If (Phase == PHASE_FLAGS) {
+            Name := ""
+            Value := unset
+
             Match := {}
-            If (Arg ~= "^(--?|/)[^:=]+[:=].+") {
-                RegExMatch(Arg, "(?:--?|/)([^:=]+)[:=](.+)", &Match)
+            If (RegExMatch(Arg, RE_PREFIX_EQ, &Match) > 0) {
                 Name := Match[1]
                 Value := Match[2]
-                NameToValue[Name] := Value
-            } Else If (Arg != "--"
-                    && Args_.Length > 0
-                    && !(Args_[1] ~= "^(--?[^-]|/.|--$)")) {
-                RegExMatch(Arg, "(?:--?|/)(.+)", &Match)
+            } Else If (RegExMatch(Arg, RE_PREFIX, &Match) > 0) {
                 Name := Match[1]
-                While (Args_.Length > 0
-                        && !(Args_[1] ~= "^(--?[^-]|/.|--$)")) {
-                    Value := Args_.RemoveAt(1)
-                    If (!NameToValue.Has(Name)) {
-                        NameToValue[Name] := Value
-                    } Else {
-                        If (!IsObject(NameToValue[Name])) {
-                            NameToValue[Name] := [ NameToValue[Name] ]
-                        }
-                        NameToValue[Name].Push(Value)
-                    }
-                }
-            } Else If (Arg ~= "^(?:^--?|/)") {
-                RegExMatch(Arg, "(?:--?|/)(.+)", &Match)
-                Name := Match[1]
+            }
+
+            If (Name && StrLen(Name) > 0) {
                 If (!NameToCount.Has(Name)) {
                     NameToCount[Name] := 0
                 }
                 NameToCount[Name] := NameToCount[Name] + 1
+
+                If (!NameToValues.Has(Name)) {
+                    NameToValues[Name] := []
+                }
+
+                If (IsSet(Value)) {
+                    NameToValues[Name].Push(Value)
+                }
+
+                While (Args_.Length > 0) {
+                    If (Args_[1] == "--" || Args_[1] ~= RE_PREFIX) {
+                        Break
+                    }
+
+                    Value := Args_.RemoveAt(1)
+                    NameToValues[Name].Push(Value)
+                }
             }
         }
 
@@ -120,6 +134,6 @@ NaiveParseArguments(Args) {
         }
     }
 
-    Return NaiveArguments(Positionals, NameToValue, NameToCount, Remaining)
+    Return NaiveArguments(Positionals, NameToValues, NameToCount, Remaining)
 }
 
