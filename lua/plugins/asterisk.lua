@@ -22,6 +22,8 @@ config.keymaps.x['g#'] = {
   label = 'partial word (backwards)',
 }
 
+vim.cmd('let g:asterisk#keeppos = 1')
+
 return {
   'haya14busa/vim-asterisk',
   event = "VeryLazy",
