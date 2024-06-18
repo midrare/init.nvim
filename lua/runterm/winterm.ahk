@@ -59,15 +59,19 @@ OpenWindowsTerminal(WorkingDir, Profile := "", Cmd := "", TimeoutSecs := 5) {
 
     Try {
         TermCmd := WINDOWS_TERMINAL_LAUNCHER
-        If (WorkingDir && StrLen(WorkingDir) > 0) {
+        If (WorkingDir) {
             TermCmd := TermCmd
                     . " -d "
-                    . "`"`"" . StrReplace(WorkingDir, "`"`"", "\`"`"") . "`"`""
+                    . '"'
+                    . StrReplace(WorkingDir, '"', '\"')
+                    . '"'
         }
-        If (Profile && StrLen(Profile) > 0) {
+        If (Profile) {
             TermCmd := TermCmd
                     . " -p "
-                    . "`"`"" . StrReplace(Profile, "`"`"", "\`"`"") . "`"`""
+                    . '"'
+                    . StrReplace(Profile, '"', '\"')
+                    . '"'
         }
         Run(TermCmd,,, &TermPid)
         UsedUri := False
@@ -108,7 +112,7 @@ OpenWindowsTerminal(WorkingDir, Profile := "", Cmd := "", TimeoutSecs := 5) {
 
     If (TermPid >= 0) {
         WinWait("ahk_pid " . TermPid,, TimeoutSecs)
-        If (UsedUri && WorkingDir && StrLen(WorkingDir) > 0) {
+        If (UsedUri && WorkingDir) {
             SendWindowsTerminalCmds(TermPid, [ ("cd '" . WorkingDir . "'")
                 , "cls; clear" ])
         }
