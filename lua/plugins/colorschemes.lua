@@ -74,4 +74,10 @@ return {
       },
     }
   },
+  {
+    'maxmx03/fluoromachine.nvim',
+    priority = 1000,
+    lazy = true,
+    config = true,
+  }
 }
