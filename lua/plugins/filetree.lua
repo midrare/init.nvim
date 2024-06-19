@@ -49,6 +49,10 @@ return {
       filters = { dotfiles = true, custom = { '__pycache__' } },
       on_attach = function(bufnr)
         require('nvim-tree.api').config.mappings.default_on_attach(bufnr)
+
+        -- disable open in-place (take over filetree window)
+        vim.keymap.del('n', '<C-e>', { buffer = bufnr })
+        vim.keymap.set('n', '<C-e>', '<Nop>', { buffer = bufnr, desc = 'NOP' })
       end,
     },
   },
