@@ -21,9 +21,9 @@ table.insert(config.ignored_filetypes, 'NvimTree')
 
 return {
   {
-    'kyazdani42/nvim-tree.lua',
+    'nvim-tree/nvim-tree.lua',
     lazy = true,
-    dependencies = 'kyazdani42/nvim-web-devicons',
+    dependencies = 'nvim-tree/nvim-web-devicons',
     opts = {
       sync_root_with_cwd = true,
       respect_buf_cwd = true,
