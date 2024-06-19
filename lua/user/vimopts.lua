@@ -26,6 +26,10 @@ M.setup = function()
   vim.opt.sidescrolloff = 4
   vim.opt.showbreak = '↪'
 
+  -- https://github.com/nvim-tree/nvim-tree.lua?tab=readme-ov-file#setup
+  vim.g.loaded_netrw = 1
+  vim.g.loaded_netrwPlugin = 1
+
   -- if vim.fn.exists("+shellslash") ~= 0 then
   --   vim.opt.shellslash = true
   -- end
