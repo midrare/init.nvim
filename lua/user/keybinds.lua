@@ -66,11 +66,6 @@ M.setup = function()
     end,
   }
 
-  config.keymaps.n['<leader>k'] = {
-    label = 'tasks',
-    cmd = '<cmd>Telescope overseer<cr>',
-  }
-
   config.keymaps.n['<F11>'] = {
     label = 'fullscreen',
     cmd = function()
