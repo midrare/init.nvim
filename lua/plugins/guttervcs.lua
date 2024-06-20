@@ -4,28 +4,6 @@ config.keymaps = config.keymaps or {}
 config.keymaps.n = config.keymaps.n or {}
 config.keymaps.x = config.keymaps.x or {}
 
-config.keymaps.n['<leader>q'] = {
-  label = 'vcs',
-}
-config.keymaps.n['<leader>qs'] = {
-  label = 'stage',
-  cmd = function()
-    require('vgit').buffer_hunk_stage()
-  end,
-}
-config.keymaps.n['<leader>qS'] = {
-  label = 'stage buffer',
-  cmd = function()
-    require('vgit').buffer_stage()
-  end,
-}
-config.keymaps.n['<leader>qU'] = {
-  label = 'unstage buffer',
-  cmd = function()
-    require('vgit').buffer_unstage()
-  end,
-}
-
 return {
   {
     'lewis6991/gitsigns.nvim',
@@ -71,11 +49,4 @@ return {
       },
     },
   },
-  {
-    'tanvirtin/vgit.nvim',
-    lazy = true,
-    dependencies = 'nvim-lua/plenary.nvim',
-    -- disable vgit.nvim gutter in favor of gitsigns.nvim
-    opts = { live_gutter = { enabled = false } }
-  }
 }
