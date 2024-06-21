@@ -15,11 +15,27 @@ config.keymaps.x = config.keymaps.x or {}
 config.keymaps.n['<leader>g'] = {
   label = 'files',
   cmd = function()
-    require('telescope.builtin').find_files()
+    require('telescope.builtin').find_files({
+      cwd = require('telescope.utils').buffer_dir()
+    })
   end
 }
 config.keymaps.n['<leader>G'] = {
+  label = 'project files',
+  cmd = function()
+    require('telescope.builtin').find_files()
+  end
+}
+config.keymaps.n['<leader>e'] = {
   label = 'grep',
+  cmd = function()
+    require('telescope.builtin').live_grep({
+      cwd = require('telescope.utils').buffer_dir()
+    })
+  end
+}
+config.keymaps.n['<leader>E'] = {
+  label = 'grep project',
   cmd = function()
     require('telescope.builtin').live_grep()
   end

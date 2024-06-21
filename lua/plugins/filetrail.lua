@@ -5,14 +5,14 @@ config.keymaps.n = config.keymaps.n or {}
 config.keymaps.x = config.keymaps.x or {}
 
 
-config.keymaps.n['<leader>e'] = {
+config.keymaps.n['<alt>e'] = {
   label = 'pop trail',
   cmd = function()
     require("trailblazer").track_back()
   end,
 }
 
-config.keymaps.n['<leader>E'] = {
+config.keymaps.n['<alt>E'] = {
   label = 'append trail',
   cmd = function()
     require("trailblazer").new_trail_mark()
