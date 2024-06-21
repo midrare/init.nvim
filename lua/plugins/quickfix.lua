@@ -16,12 +16,6 @@ return {
         label = 'loclist',
         cmd = '<cmd>lopen<cr>',
       }
-      config.keymaps.n['<leader>c'] = {
-        label = 'diagnostics',
-        cmd = function()
-          require("diaglist").open_all_diagnostics()
-        end,
-      }
       config.keymaps.n['<leader>v'] = {
         label = 'references',
         cmd = function()
@@ -42,6 +36,31 @@ return {
   {
     "onsails/diaglist.nvim",
     lazy = true,
+    init = function(m)
+      local config = require("user.config")
+
+      config.keymaps = config.keymaps or {}
+      config.keymaps.n = config.keymaps.n or {}
+
+      config.keymaps.n['<leader>c'] = {
+        label = 'diagnostics',
+        cmd = function()
+          require("diaglist").open_buffer_diagnostics()
+        end,
+      }
+
+      config.keymaps.n['<leader>C'] = {
+        label = 'all diagnostics',
+        cmd = function()
+          require("diaglist").open_all_diagnostics()
+        end,
+      }
+
+      config.ignored_filetypes = config.ignored_filetypes or {}
+      config.ignored_buftypes = config.ignored_buftypes or {}
+      table.insert(config.ignored_filetypes, 'qf')
+      table.insert(config.ignored_buftypes, 'quickfix')
+    end,
     config = function(m, opts)
       require("diaglist").init(opts)
     end,
