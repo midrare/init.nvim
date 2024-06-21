@@ -93,3 +93,4 @@ stevearc/dressing.nvim
 folke/todo-comments.nvim
 petertriho/nvim-scrollbar
 mhinz/vim-signify
+LeonHeidelbach/trailblazer.nvim
