@@ -64,6 +64,9 @@ return {
     config = function(m, opts)
       require("diaglist").init(opts)
     end,
-    opts = { debounce_ms = 500 }
+    opts = {
+      debounce_ms = 500,
+      debug = false,
+    }
   }
 }
