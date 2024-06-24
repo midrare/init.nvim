@@ -45,10 +45,10 @@ function GridWindow:open(width, height)
   if not vim.api.nvim_win_is_valid(self._handle) then
     local cfg = vim.tbl_deep_extend('force', self._config, { noautocmd = true })
     self._handle = vim.api.nvim_open_win(self._bufnr, false, cfg)
-    vim.api.nvim_win_set_option(
-      self._handle,
+    vim.api.nvim_set_option_value(
       'winhighlight',
-      'NormalFloat:Normal,FloatBorder:ReachBorder'
+      'NormalFloat:Normal,FloatBorder:ReachBorder',
+      { win = self._handle, scope = 'local' }
     )
   end
 end
