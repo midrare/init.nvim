@@ -33,6 +33,7 @@ sunjon/Shade.nvim
 abecodes/tabout.nvim
 machakann/vim-sandwich
 ggandor/leap.nvim
+ggandor/flit.nvim
 matbme/JABS.nvim
 wincent/ferret
 mhartington/formatter.nvim
