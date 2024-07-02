@@ -28,6 +28,9 @@ return {
         ignore = {
           filetypes = config.ignored_filetypes,
           buftypes = config.ignored_buftypes,
+        },
+        keymaps = {
+          ["<tab>"] = "actions.scroll"
         }
       }
     end,
