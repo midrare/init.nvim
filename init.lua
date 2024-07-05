@@ -1,5 +1,6 @@
 local moduletitle = 'init.lua'
 
+---@diagnostic disable-next-line: lowercase-global
 function prequire(plugin)
   local name = plugin:match('^.+[\\/](.+)') or plugin
   local is_ok, mod = pcall(require, name)
