@@ -27,6 +27,8 @@ local function bootstrap_package_manager()
   vim.opt.rtp:prepend(lazypath)
 end
 
+math.randomseed(os.time())
+
 local config = require('user.config')
 
 require('user.vimopts').setup()
