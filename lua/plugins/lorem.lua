@@ -10,7 +10,9 @@ config.keymaps.n['<leader>ru'] = {
     local s = require('lorem').gen_words(math.max(1, vim.v.count))
 
     -- HACK remove period appended by lorem.nvim
-    s = s:sub(1, #s - 1)
+    if s:sub(#s, #s) == "." then
+      s = s:sub(1, #s - 1)
+    end
 
     vim.api.nvim_paste(s, true, -1)
   end,
