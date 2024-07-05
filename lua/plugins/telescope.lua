@@ -1,7 +1,4 @@
-local modulename, _ = ...
-local moduleroot = modulename:gsub('(.+)%..+', '%1')
-
-
+local modulename = "telescope.lua"
 local config = require("user.config")
 
 config.telescope = config.telescope or {}

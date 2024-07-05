@@ -1,6 +1,3 @@
-local modulename, _ = ...
-local moduleroot = modulename:gsub('(.+)%..+', '%1')
-
 local M = {}
 
 local function _assign(old, new, k)

@@ -1,5 +1,4 @@
-local modulename, _ = ...
-local moduleroot = modulename:gsub('(.+)%..+', '%1')
+local modulename = "depgraph.lua"
 
 local M = {}
 

@@ -1,4 +1,4 @@
-local modulename, _ = ...
+local modulename = "formatter.lua"
 
 local config = require("user.config")
 

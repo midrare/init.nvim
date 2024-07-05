@@ -1,8 +1,28 @@
-local modulename, _ = ...
+local modulename = "keybinds.lua"
 local M = {}
 
 local is_macro_recording = false
 local macro_reg = 'm'
+
+local uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+local lowercase = "abcdefghijklmnopqrstuvwxyz"
+local digits = "1234567890"
+
+
+local function random_str(alphabet, len)
+  if len <= 0 then
+    return ''
+  end
+
+  local s = ""
+  for _ = 1, len do
+    local idx = math.random(1, #alphabet)
+    s = s .. alphabet:sub(idx, idx)
+  end
+
+  return s
+end
+
 
 M.setup = function()
   local config = require("user.config")
@@ -36,6 +56,22 @@ M.setup = function()
     label = 'code action',
     cmd = vim.lsp.buf.code_action,
   }
+
+  config.keymaps.n['<leader>rp'] = {
+    label = 'random digits',
+    cmd = function()
+      local s = random_str(digits, 16)
+      vim.api.nvim_paste(s, true, -1)
+    end,
+  }
+  config.keymaps.n['<leader>rP'] = {
+    label = 'random alnums',
+    cmd = function()
+      local s = random_str(lowercase .. uppercase .. digits, 16)
+      vim.api.nvim_paste(s, true, -1)
+    end,
+  }
+
 
   config.keymaps.n[' e'] = {
     label = 'definition',
