@@ -132,39 +132,20 @@ return {
       local whichkey = require("which-key")
       whichkey.setup(opts)
       foreach_keymap(cmds, function(mode, prefix, key, map)
-        if key == 0 and whichkey then
-          whichkey.register({ [prefix] = { name = map.label } }, {
-            mode = mode,
-            silent = map.silent ~= false,
-            nowait = map.nowait ~= false,
-            noremap = map.noremap ~= false,
-            expr = map.expr == true,
-          })
-        elseif key ~= 0 and whichkey then
-          local bind = {}
-          if not map.cmd and not map.hidden then
-            bind = { map.label }
-          elseif map.cmd and map.hidden then
-            bind = { map.cmd, "which_key_ignore" }
-          elseif map.cmd and not map.hidden then
-            bind = { map.cmd, map.label }
-          elseif not map.cmd and map.hidden then
-            bind = {}
-          end
-
-          if bind then
-            whichkey.register(
-              { [key] = bind },
-              {
-                mode = mode,
-                prefix = prefix,
-                silent = map.silent ~= false,
-                nowait = map.nowait ~= false,
-                noremap = map.noremap ~= false,
-                expr = map.expr == true,
-              }
-            )
-          end
+        if whichkey then
+          whichkey.add(
+            {
+              [1] = prefix .. (key ~= 0 and key or ''),
+              [2] = map.cmd or nil,
+              desc = map.label or "which_key_ignore",
+              hidden = map.hidden,
+              mode = mode,
+              silent = map.silent ~= false,
+              nowait = map.nowait ~= false,
+              noremap = map.noremap ~= false,
+              expr = map.expr == true,
+            }
+          )
         elseif key ~= 0 then
           local opts = vim.deepcopy(map)
           opts.silent = map.silent ~= false
