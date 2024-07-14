@@ -58,7 +58,7 @@ M.setup = function()
   config.keymaps.n['<leader>rp'] = {
     label = 'random digits',
     cmd = function()
-      local s = random_str(digits, 16)
+      local s = random_str(digits, 10)
       vim.api.nvim_paste(s, true, -1)
     end,
   }
