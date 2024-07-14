@@ -1,20 +1,19 @@
-local modulename = "keybinds.lua"
+local modulename = 'keybinds.lua'
 local M = {}
 
 local is_macro_recording = false
 local macro_reg = 'm'
 
-local uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-local lowercase = "abcdefghijklmnopqrstuvwxyz"
-local digits = "1234567890"
-
+local uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+local lowercase = 'abcdefghijklmnopqrstuvwxyz'
+local digits = '1234567890'
 
 local function random_str(alphabet, len)
   if len <= 0 then
     return ''
   end
 
-  local s = ""
+  local s = ''
   for _ = 1, len do
     local idx = math.random(1, #alphabet)
     s = s .. alphabet:sub(idx, idx)
@@ -23,9 +22,8 @@ local function random_str(alphabet, len)
   return s
 end
 
-
 M.setup = function()
-  local config = require("user.config")
+  local config = require('user.config')
 
   config.keymaps = config.keymaps or {}
   config.keymaps.n = config.keymaps.n or {}
@@ -67,11 +65,10 @@ M.setup = function()
   config.keymaps.n['<leader>rP'] = {
     label = 'random alnums',
     cmd = function()
-      local s = random_str(lowercase .. uppercase .. digits, 16)
+      local s = random_str(lowercase .. uppercase .. digits, 10)
       vim.api.nvim_paste(s, true, -1)
     end,
   }
-
 
   config.keymaps.n[' e'] = {
     label = 'definition',
@@ -98,7 +95,7 @@ M.setup = function()
   config.keymaps.n['<c-tab>'] = {
     label = 'file jump',
     cmd = function()
-      require("other-nvim").open()
+      require('other-nvim').open()
     end,
   }
 
@@ -130,9 +127,9 @@ M.setup = function()
     cmd = function()
       local cnt = vim.v.count
       if cnt <= 0 then
-        vim.cmd.normal({ "@" .. macro_reg, bang = true })
+        vim.cmd.normal({ '@' .. macro_reg, bang = true })
       else
-        vim.cmd.normal({ vim.v.count1 .. "@" .. macro_reg, bang = true })
+        vim.cmd.normal({ vim.v.count1 .. '@' .. macro_reg, bang = true })
       end
     end,
   }
@@ -140,10 +137,10 @@ M.setup = function()
     label = 'record',
     cmd = function()
       if not is_macro_recording then
-        vim.cmd.normal({ "q" .. macro_reg, bang = true })
+        vim.cmd.normal({ 'q' .. macro_reg, bang = true })
         is_macro_recording = true
       else
-        vim.cmd.normal({ "q", bang = true })
+        vim.cmd.normal({ 'q', bang = true })
         is_macro_recording = false
       end
     end,
