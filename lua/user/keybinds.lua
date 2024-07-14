@@ -55,6 +55,29 @@ M.setup = function()
     cmd = vim.lsp.buf.code_action,
   }
 
+  config.keymaps.n['<leader>ri'] = {
+    label = 'include guard',
+    cmd = function()
+      local file_name, _ =
+        vim.api.nvim_buf_get_name(0):gsub('[\\/]+$', ''):gsub('^.*[\\/]+', '')
+      local guard_name, _ = file_name:gsub('^%.*([^%.]+).*', '%1')
+        :upper()
+        :gsub('[^a-zA-Z0-9]', '_')
+        :gsub('^[^a-zA-Z0-9]+', '')
+        :gsub('[^a-zA-Z0-9]+$', '')
+      local guard = guard_name .. '_H' .. random_str(digits, 8)
+      vim.api.nvim_buf_set_lines(0, 0, 0, true, {
+        '#ifndef ' .. guard,
+        '#define ' .. guard,
+        '',
+      })
+      vim.api.nvim_buf_set_lines(0, -1, -1, true, {
+        '',
+        '#endif  // ' .. guard,
+      })
+    end,
+  }
+
   config.keymaps.n['<leader>rp'] = {
     label = 'random digits',
     cmd = function()
