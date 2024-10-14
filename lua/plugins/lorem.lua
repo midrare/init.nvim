@@ -7,7 +7,7 @@ config.keymaps.x = config.keymaps.x or {}
 config.keymaps.n['<leader>ru'] = {
   label = 'lorem',
   cmd = function()
-    local s = require('lorem').gen_words(math.max(1, vim.v.count))
+    local s = require('lorem').words(math.max(1, vim.v.count))
 
     -- HACK remove period appended by lorem.nvim
     if s:sub(#s, #s) == "." then
