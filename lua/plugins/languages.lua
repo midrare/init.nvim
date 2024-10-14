@@ -49,6 +49,7 @@ local specs = {
         'java',
         'javascript',
         'json',
+        'kotlin',
         'latex',
         'lua',
         'make',
