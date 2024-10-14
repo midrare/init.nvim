@@ -1,5 +1,6 @@
 {
     "guifont": "monospace:h10",
     "colorscheme": "tokyonight",
-    "max_downloads": 4
+    "max_downloads": 4,
+    "devpath": "~/Projects"
 }

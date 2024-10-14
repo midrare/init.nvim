@@ -41,7 +41,7 @@ require('lazy').setup({
   { 'midrare/microkasten.nvim', branch = 'dev', dev = true },
   { import = 'plugins' },
 }, {
-  dev = { path = '~/Projects', fallback = true },
+  dev = { path = config.devpath, fallback = true },
   git = { timeout = 300 },
   change_detection = { enabled = false, notify = false },
   concurrency = (
