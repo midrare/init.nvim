@@ -121,10 +121,10 @@ return {
           g = true,
         },
       },
-      window = { border = 'single' },
-      ignore_missing = true,
-      key_labels = { ['<lt>'] = '<', ['>'] = '>' },
-      icons = { separator = '→' },
+      icons = {
+        separator = '→',
+        keys = { ['<lt>'] = '<', ['>'] = '>' },
+      },
     },
     config = function(m, opts)
       enqueue_keymaps()
