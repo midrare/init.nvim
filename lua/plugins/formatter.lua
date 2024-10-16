@@ -6,10 +6,13 @@ config.keymaps = config.keymaps or {}
 config.keymaps.n = config.keymaps.n or {}
 config.keymaps.x = config.keymaps.x or {}
 
+local format = nil
 config.keymaps.n['<leader>ro'] = {
   label = 'reformat',
   cmd = function()
-    if vim.fn.exists(':Format') then
+    if format ~= nil then
+      format()
+    elseif vim.fn.exists(':Format') then
       vim.cmd('Format')
     else
       vim.lsp.buf.format()
@@ -35,33 +38,49 @@ config.formatters.filetype['toml'] = 'taplo'
 config.formatters.filetype['yaml'] = 'pyaml'
 config.formatters.filetype['zig'] = 'zigfmt'
 
+
 return {
-  'mhartington/formatter.nvim',
+  'stevearc/conform.nvim',
   lazy = true,
   cmd = { 'Format' },
+  init = function()
+    vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+
+    format = function(opts)
+      opts = opts or {}
+      local ft = vim.bo.filetype
+      local wants = vim.iter({
+        vim.g["formatter_" .. ft] or false,
+        config.formatters.filetype[ft] or false,
+      }):flatten():filter(function(o) return o and true end):totable()
+
+      local conform = require('conform')
+      conform.format(vim.tbl_deep_extend('force', opts, {
+        formatters = wants,
+      }))
+    end
+
+    vim.api.nvim_create_user_command("Format", function(args)
+      local range = nil
+      if args.count >= 0 then
+        local end_line = vim.api.nvim_buf_get_lines(0, args.line2 - 1, args.line2, true)[1]
+        range = {
+          start = { args.line1, 0 },
+          ["end"] = { args.line2, end_line:len() },
+        }
+      end
+
+      if format ~= nil then
+        format({ range = range })
+      end
+    end, { range = true })
+  end,
   opts = {
-    filetype = {
-      ["*"] = {
-        function()
-          local ft = vim.bo.filetype
-          local wants = {
-            vim.g["formatter_" .. ft] or false,
-            config.formatters.filetype[ft] or false,
-          }
-
-          local _, available = pcall(require, "formatter.filetypes." .. ft)
-          available = available or {}
-
-          for _, want in ipairs(wants) do
-            if want and available[want] then
-              return available[want]()
-            end
-          end
-
-          vim.lsp.buf.format()
-          return nil
-        end
-      }
+    default_format_opts = {
+      async = true,
+      lsp_format = 'fallback',
+      stop_after_first = true,
     },
+    notify_no_formatters = false,
   },
 }
