@@ -52,7 +52,8 @@ return {
         sources = {
           { name = 'nvim_lsp' },
           { name = 'luasnip' },
-          { name = 'buffer', { sorting = { priority_weight = 0.75 } } },
+          { name = 'codeium' },
+          { name = 'buffer',  { sorting = { priority_weight = 0.75 } } },
           { name = 'path' },
         },
         formatting = {
@@ -126,5 +127,11 @@ return {
   },
   { 'hrsh7th/cmp-nvim-lsp' },
   {
+    "Exafunction/codeium.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "hrsh7th/nvim-cmp",
+    },
+    opts = {},
   },
 }
