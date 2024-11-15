@@ -48,12 +48,25 @@ return {
 
       config.lsp = config.lsp or {}
       config.lsp.on_init = config.lsp.on_init or {}
-      config.lsp.on_init['*'] = config.lsp.on_init['*'] or {}
-      table.insert(config.lsp.on_init['*'], function(...)
-        local _, lsp = pcall(require, 'hookspace.hooks.lspconfig')
-        if lsp then
-          lsp.server_init(...)
+      config.lsp.on_attach = config.lsp.on_attach or {}
+      config.lsp.server_config = config.lsp.server_config or {}
+
+      table.insert(config.lsp.on_init, function(client, initialize_result)
+        local hook_ok, hook = pcall(require, 'hookspace.hooks.lspconfig')
+        if hook_ok and hook then
+          local settings = client.config.settings or {}
+          client.config.settings = vim.tbl_deep_extend(
+            "force",
+            settings,
+            config.lsp.server_config or {},
+            hook.server_config(client.name) or {}
+          )
+          client.notify("workspace/didChangeConfiguration", {
+            settings = client.config.settings,
+          })
         end
+
+        return true
       end)
     end,
     opts = function(m, opts)

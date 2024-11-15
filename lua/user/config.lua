@@ -31,7 +31,9 @@ local base = {
   },
   lsp = {
     ensure_installed = {},
-    server_config = { ['*'] = {} },
+    on_init = {},
+    on_attach = {},
+    server_config = {},
   },
   root_markers = {
     '.bzr', '.git', '.hg', '.root', '.svn', '_darcs', 'package.json',

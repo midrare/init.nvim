@@ -23,12 +23,12 @@ return {
           vim.api.nvim_win_get_cursor(0)
         )
         return col ~= 0
-          and (
-            vim.api
+            and (
+              vim.api
               .nvim_buf_get_lines(0, line - 1, line, true)[1]
               :sub(col, col)
               :match('%s') == nil
-          )
+            )
       end
 
       -- buffers ""
@@ -124,24 +124,7 @@ return {
       require('luasnip.loaders.from_vscode').lazy_load()
     end,
   },
+  { 'hrsh7th/cmp-nvim-lsp' },
   {
-    'hrsh7th/cmp-nvim-lsp',
-    priority = 200,
-    init = function(m)
-      local config = require('user.config')
-
-      config.lsp = config.lsp or {}
-      config.lsp.before_init = config.lsp.before_init or {}
-      config.lsp.on_init = config.lsp.on_init or {}
-      config.lsp.on_attach = config.lsp.on_attach or {}
-      config.lsp.server_config = config.lsp.server_config or {}
-      config.lsp.server_config['*'] = config.lsp.server_config['*'] or {}
-
-      table.insert(config.lsp.server_config['*'], function(lspcfg, name)
-        return vim.tbl_deep_extend("force", lspcfg, {
-          capabilities = require('cmp_nvim_lsp').default_capabilities()
-        })
-      end)
-    end,
   },
 }

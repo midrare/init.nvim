@@ -1,207 +1,198 @@
 local config = require("user.config")
 
+
 config.lsp = config.lsp or {}
-config.lsp.before_init = config.lsp.before_init or {}
-config.lsp.on_init = config.lsp.on_init or {}
+config.lsp.ensure_installed = config.lsp.ensure_installed or {}
 config.lsp.on_attach = config.lsp.on_attach or {}
+config.lsp.on_init = config.lsp.on_init or {}
 config.lsp.server_config = config.lsp.server_config or {}
-config.lsp.server_config.lua_ls = config.lsp.server_config.lua_ls or {}
-config.lsp.server_config.jsonls = config.lsp.server_config.jsonls or {}
 
-table.insert(config.lsp.server_config.lua_ls, function(cfg, server)
-  cfg.settings = cfg.settings or {}
-  cfg.settings.Lua = cfg.settings.Lua or {}
-  cfg.settings.Lua.workspace = cfg.settings.Lua.workspace or {}
-  cfg.settings.Lua.workspace.checkThirdParty = false
-end)
-
-local jsonls_opts = {
-  settings = {
-    json = {
-      -- Find more schemas here: https://www.schemastore.org/json/
-      schemas = {
-        {
-          description = 'TypeScript compiler configuration file',
-          fileMatch = {
-            'tsconfig.json',
-            'tsconfig.*.json',
-          },
-          url = 'https://json.schemastore.org/tsconfig.json',
+config.lsp.server_config = vim.tbl_deep_extend("keep", config.lsp.server_config, {
+  Lua = {
+    workspace = {
+      checkThirdParty = false
+    }
+  },
+  json = {
+    -- Find more schemas here: https://www.schemastore.org/json/
+    schemas = {
+      {
+        description = 'TypeScript compiler configuration file',
+        fileMatch = {
+          'tsconfig.json',
+          'tsconfig.*.json',
         },
-        {
-          description = 'Lerna config',
-          fileMatch = { 'lerna.json' },
-          url = 'https://json.schemastore.org/lerna.json',
+        url = 'https://json.schemastore.org/tsconfig.json',
+      },
+      {
+        description = 'Lerna config',
+        fileMatch = { 'lerna.json' },
+        url = 'https://json.schemastore.org/lerna.json',
+      },
+      {
+        description = 'Babel configuration',
+        fileMatch = {
+          '.babelrc.json',
+          '.babelrc',
+          'babel.config.json',
         },
-        {
-          description = 'Babel configuration',
-          fileMatch = {
-            '.babelrc.json',
-            '.babelrc',
-            'babel.config.json',
-          },
-          url = 'https://json.schemastore.org/babelrc.json',
+        url = 'https://json.schemastore.org/babelrc.json',
+      },
+      {
+        description = 'ESLint config',
+        fileMatch = {
+          '.eslintrc.json',
+          '.eslintrc',
         },
-        {
-          description = 'ESLint config',
-          fileMatch = {
-            '.eslintrc.json',
-            '.eslintrc',
-          },
-          url = 'https://json.schemastore.org/eslintrc.json',
+        url = 'https://json.schemastore.org/eslintrc.json',
+      },
+      {
+        description = 'Bucklescript config',
+        fileMatch = { 'bsconfig.json' },
+        url = 'https://raw.githubusercontent.com/rescript-lang/rescript-compiler/8.2.0/docs/docson/build-schema.json',
+      },
+      {
+        description = 'Prettier config',
+        fileMatch = {
+          '.prettierrc',
+          '.prettierrc.json',
+          'prettier.config.json',
         },
-        {
-          description = 'Bucklescript config',
-          fileMatch = { 'bsconfig.json' },
-          url = 'https://raw.githubusercontent.com/rescript-lang/rescript-compiler/8.2.0/docs/docson/build-schema.json',
+        url = 'https://json.schemastore.org/prettierrc',
+      },
+      {
+        description = 'Vercel Now config',
+        fileMatch = { 'now.json' },
+        url = 'https://json.schemastore.org/now',
+      },
+      {
+        description = 'Stylelint config',
+        fileMatch = {
+          '.stylelintrc',
+          '.stylelintrc.json',
+          'stylelint.config.json',
         },
-        {
-          description = 'Prettier config',
-          fileMatch = {
-            '.prettierrc',
-            '.prettierrc.json',
-            'prettier.config.json',
-          },
-          url = 'https://json.schemastore.org/prettierrc',
+        url = 'https://json.schemastore.org/stylelintrc',
+      },
+      {
+        description = 'A JSON schema for the ASP.NET LaunchSettings.json files',
+        fileMatch = { 'launchsettings.json' },
+        url = 'https://json.schemastore.org/launchsettings.json',
+      },
+      {
+        description = 'Schema for CMake Presets',
+        fileMatch = {
+          'CMakePresets.json',
+          'CMakeUserPresets.json',
         },
-        {
-          description = 'Vercel Now config',
-          fileMatch = { 'now.json' },
-          url = 'https://json.schemastore.org/now',
+        url = 'https://raw.githubusercontent.com/Kitware/CMake/master/Help/manual/presets/schema.json',
+      },
+      {
+        description = 'Configuration file as an alternative for configuring your repository in the settings page.',
+        fileMatch = {
+          '.codeclimate.json',
         },
-        {
-          description = 'Stylelint config',
-          fileMatch = {
-            '.stylelintrc',
-            '.stylelintrc.json',
-            'stylelint.config.json',
-          },
-          url = 'https://json.schemastore.org/stylelintrc',
+        url = 'https://json.schemastore.org/codeclimate.json',
+      },
+      {
+        description = 'LLVM compilation database',
+        fileMatch = {
+          'compile_commands.json',
         },
-        {
-          description = 'A JSON schema for the ASP.NET LaunchSettings.json files',
-          fileMatch = { 'launchsettings.json' },
-          url = 'https://json.schemastore.org/launchsettings.json',
+        url = 'https://json.schemastore.org/compile-commands.json',
+      },
+      {
+        description = 'Config file for Command Task Runner',
+        fileMatch = {
+          'commands.json',
         },
-        {
-          description = 'Schema for CMake Presets',
-          fileMatch = {
-            'CMakePresets.json',
-            'CMakeUserPresets.json',
-          },
-          url = 'https://raw.githubusercontent.com/Kitware/CMake/master/Help/manual/presets/schema.json',
+        url = 'https://json.schemastore.org/commands.json',
+      },
+      {
+        description = 'AWS CloudFormation provides a common language for you to describe and provision all the infrastructure resources in your cloud environment.',
+        fileMatch = {
+          '*.cf.json',
+          'cloudformation.json',
         },
-        {
-          description = 'Configuration file as an alternative for configuring your repository in the settings page.',
-          fileMatch = {
-            '.codeclimate.json',
-          },
-          url = 'https://json.schemastore.org/codeclimate.json',
+        url = 'https://raw.githubusercontent.com/awslabs/goformation/v5.2.9/schema/cloudformation.schema.json',
+      },
+      {
+        description = 'The AWS Serverless Application Model (AWS SAM, previously known as Project Flourish) extends AWS CloudFormation to provide a simplified way of defining the Amazon API Gateway APIs, AWS Lambda functions, and Amazon DynamoDB tables needed by your serverless application.',
+        fileMatch = {
+          'serverless.template',
+          '*.sam.json',
+          'sam.json',
         },
-        {
-          description = 'LLVM compilation database',
-          fileMatch = {
-            'compile_commands.json',
-          },
-          url = 'https://json.schemastore.org/compile-commands.json',
+        url = 'https://raw.githubusercontent.com/awslabs/goformation/v5.2.9/schema/sam.schema.json',
+      },
+      {
+        description = 'Json schema for properties json file for a GitHub Workflow template',
+        fileMatch = {
+          '.github/workflow-templates/**.properties.json',
         },
-        {
-          description = 'Config file for Command Task Runner',
-          fileMatch = {
-            'commands.json',
-          },
-          url = 'https://json.schemastore.org/commands.json',
+        url = 'https://json.schemastore.org/github-workflow-template-properties.json',
+      },
+      {
+        description = 'golangci-lint configuration file',
+        fileMatch = {
+          '.golangci.toml',
+          '.golangci.json',
         },
-        {
-          description = 'AWS CloudFormation provides a common language for you to describe and provision all the infrastructure resources in your cloud environment.',
-          fileMatch = {
-            '*.cf.json',
-            'cloudformation.json',
-          },
-          url = 'https://raw.githubusercontent.com/awslabs/goformation/v5.2.9/schema/cloudformation.schema.json',
+        url = 'https://json.schemastore.org/golangci-lint.json',
+      },
+      {
+        description = 'JSON schema for the JSON Feed format',
+        fileMatch = {
+          'feed.json',
         },
-        {
-          description = 'The AWS Serverless Application Model (AWS SAM, previously known as Project Flourish) extends AWS CloudFormation to provide a simplified way of defining the Amazon API Gateway APIs, AWS Lambda functions, and Amazon DynamoDB tables needed by your serverless application.',
-          fileMatch = {
-            'serverless.template',
-            '*.sam.json',
-            'sam.json',
-          },
-          url = 'https://raw.githubusercontent.com/awslabs/goformation/v5.2.9/schema/sam.schema.json',
+        url = 'https://json.schemastore.org/feed.json',
+        versions = {
+          ['1'] = 'https://json.schemastore.org/feed-1.json',
+          ['1.1'] = 'https://json.schemastore.org/feed.json',
         },
-        {
-          description = 'Json schema for properties json file for a GitHub Workflow template',
-          fileMatch = {
-            '.github/workflow-templates/**.properties.json',
-          },
-          url = 'https://json.schemastore.org/github-workflow-template-properties.json',
+      },
+      {
+        description = 'Packer template JSON configuration',
+        fileMatch = {
+          'packer.json',
         },
-        {
-          description = 'golangci-lint configuration file',
-          fileMatch = {
-            '.golangci.toml',
-            '.golangci.json',
-          },
-          url = 'https://json.schemastore.org/golangci-lint.json',
+        url = 'https://json.schemastore.org/packer.json',
+      },
+      {
+        description = 'NPM configuration file',
+        fileMatch = {
+          'package.json',
         },
-        {
-          description = 'JSON schema for the JSON Feed format',
-          fileMatch = {
-            'feed.json',
-          },
-          url = 'https://json.schemastore.org/feed.json',
-          versions = {
-            ['1'] = 'https://json.schemastore.org/feed-1.json',
-            ['1.1'] = 'https://json.schemastore.org/feed.json',
-          },
+        url = 'https://json.schemastore.org/package.json',
+      },
+      {
+        description = 'JSON schema for Visual Studio component configuration files',
+        fileMatch = {
+          '*.vsconfig',
         },
-        {
-          description = 'Packer template JSON configuration',
-          fileMatch = {
-            'packer.json',
-          },
-          url = 'https://json.schemastore.org/packer.json',
-        },
-        {
-          description = 'NPM configuration file',
-          fileMatch = {
-            'package.json',
-          },
-          url = 'https://json.schemastore.org/package.json',
-        },
-        {
-          description = 'JSON schema for Visual Studio component configuration files',
-          fileMatch = {
-            '*.vsconfig',
-          },
-          url = 'https://json.schemastore.org/vsconfig.json',
-        },
-        {
-          description = 'Resume json',
-          fileMatch = { 'resume.json' },
-          url = 'https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json',
-        },
+        url = 'https://json.schemastore.org/vsconfig.json',
+      },
+      {
+        description = 'Resume json',
+        fileMatch = { 'resume.json' },
+        url = 'https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json',
       },
     },
   },
-  setup = {
-    commands = {
-      Format = {
-        function()
-          vim.lsp.buf.range_formatting({}, { 0, 0 }, { vim.fn.line('$'), 0 })
-        end,
-      },
-    },
-  },
-}
+})
 
 
-table.insert(config.lsp.server_config.jsonls, function(cfg, server)
-  local merged = vim.tbl_deep_extend('force', cfg, jsonls_opts)
-  for k, v in pairs(merged) do
-    cfg[k] = v
-  end
-end)
+-- local jsonls_opts = {
+--   setup = {
+--     commands = {
+--       Format = {
+--         function()
+--           vim.lsp.buf.range_formatting({}, { 0, 0 }, { vim.fn.line('$'), 0 })
+--         end,
+--       },
+--     },
+--   },
+-- }
 
 
 vim.diagnostic.config({
@@ -225,13 +216,16 @@ vim.fn.sign_define('DiagnosticSignInfo', {
   texthl = 'DiagnosticSignInfo', text = '' })
 
 
-local function sequence(...)
-  local callbacks = vim.tbl_flatten({ ... })
-  return function(...)
-    for _, callback in ipairs(callbacks) do
-      callback(...)
+local function fnseq(fns)
+  local fns_ = vim.iter({fns}):flatten():totable()
+  return function(client, initialize_result)
+    for _, fn in ipairs(fns_) do
+      if type(fn) == "string" then
+        vim.cmd('silent! ' .. vim.fn.excape(fn, " "))
+      elseif type(fn) == "function" then
+        fn(client, initialize_result)
+      end
     end
-    return true
   end
 end
 
@@ -246,61 +240,30 @@ return {
     },
     config = function(m, opts)
       local config = require("user.config")
-
       config.lsp = config.lsp or {}
-      config.lsp.before_init = config.lsp.before_init or {}
       config.lsp.on_init = config.lsp.on_init or {}
       config.lsp.on_attach = config.lsp.on_attach or {}
       config.lsp.server_config = config.lsp.server_config or {}
 
-      local function handler(name)
-        local conf = {
-          capabilities = vim.lsp.protocol.make_client_capabilities(),
-        }
-
-        for _, transform in
-          ipairs(vim.tbl_flatten({
-            config.lsp.server_config['*'],
-            config.lsp.server_config[name],
-          }))
-        do
-          local r = transform(conf, name)
-          if r then
-            conf = r
-          end
+      local function default_handler(server_name)
+        local capabilities = vim.lsp.protocol.make_client_capabilities()
+        local cmp_ok, cmp = pcall(require, 'cmp_nvim_lsp')
+        if cmp_ok and cmp then
+          capabilities = cmp.default_capabilities()
         end
 
-        local on_attach = conf.on_attach
-        local before_init = conf.before_init
-        local on_init = conf.on_init
-
-        conf.on_attach =
-          sequence(
-            on_attach,
-            config.lsp.on_attach['*'],
-            config.lsp.on_attach[name]
-          )
-
-        conf.before_init = sequence(
-          before_init,
-          config.lsp.before_init['*'],
-          config.lsp.before_init[name]
-        )
-
-        conf.on_init =
-          sequence(
-            on_init,
-            config.lsp.on_init['*'],
-            config.lsp.on_init[name]
-          )
-
-        require('lspconfig')[name].setup(conf)
+        require('lspconfig')[server_name].setup({
+          capabilities = capabilities,
+          on_init = fnseq(config.lsp.on_init),
+          on_attach = fnseq(config.lsp.on_attach),
+          settings = config.lsp.server_config or {},
+        })
       end
 
       require("mason").setup(opts)
       require('mason-lspconfig').setup({
         ensure_installed = config.lsp.ensure_installed,
-        handlers = { handler },
+        handlers = { default_handler },
       })
     end,
   },
