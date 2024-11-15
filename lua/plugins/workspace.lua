@@ -72,7 +72,7 @@ return {
     opts = function(m, opts)
       local _, cwd = pcall(require, 'hookspace.hooks.cwd')
       local _, env = pcall(require, 'hookspace.hooks.environment')
-      local _, trailblazer = pcall(require, 'hookspace.hooks.environment')
+      local _, trailblazer = pcall(require, 'hookspace.hooks.trailblazer')
       local _, session = pcall(require, 'hookspace.hooks.session')
       local _, lsp = pcall(require, 'hookspace.hooks.lspconfig')
       local _, formatter = pcall(require, 'hookspace.hooks.formatter')
