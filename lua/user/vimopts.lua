@@ -1,6 +1,10 @@
 local M = {}
 
 M.setup = function()
+  -- NOTE nocompatible must come before all other options
+  -- https://stackoverflow.com/a/8932857
+  vim.opt.compatible = false
+
   -- vim.g.airline_theme = "solarized"
   -- vim.g.airline_solarized_bg = "light"
 
@@ -37,7 +41,6 @@ M.setup = function()
   vim.cmd([[set fillchars+=eob:\ ]])
 
   vim.opt.encoding = 'utf-8'
-  vim.opt.compatible = false
   -- => akinsho/toggleterm.nvim
   vim.opt.hidden = true
 
