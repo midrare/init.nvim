@@ -8,9 +8,7 @@ config.keymaps.x = config.keymaps.x or {}
 
 config.keymaps.n['<leader>f'] = {
   label = 'file tree',
-  cmd = function()
-    require('nvim-tree.api').tree.focus()
-  end,
+  cmd = '<cmd>Neotree<cr>',
 }
 
 config.filetree = config.filetree or {}
@@ -21,39 +19,47 @@ table.insert(config.ignored_filetypes, 'NvimTree')
 
 return {
   {
-    'nvim-tree/nvim-tree.lua',
+    'nvim-neo-tree/neo-tree.nvim',
     lazy = true,
-    dependencies = 'nvim-tree/nvim-web-devicons',
-    opts = {
-      sync_root_with_cwd = true,
-      respect_buf_cwd = true,
-      diagnostics = {
-        enable = true,
-        show_on_dirs = true,
-      },
-      renderer = {
-        icons = {
-          glyphs = {
-            git = {
-              unstaged = '', -- 
-              staged = '', -- 
-              unmerged = '',
-              renamed = '➜',
-              untracked = '',
+    cmd = { 'Neotree' },
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-tree/nvim-web-devicons',
+    },
+    opts = function(_, _)
+      local ignore = {}
+      vim.list_extend(ignore, config.ignored_buftypes)
+      vim.list_extend(ignore, config.ignored_filetypes)
+
+      return {
+        auto_clean_after_session_restore = true,
+        close_if_last_window = true,
+        open_files_do_not_replace_types = ignore,
+        default_component_configs = {
+          modified = {
+            symbol = " ",
+            highlight = "NeoTreeModified",
+          },
+          git_status = {
+            symbols = {
+              added     = "",
+              conflict  = "",
               deleted = '',
-              ignored = '◌', -- ◌ ﯏ ﯏
+              ignored = '◌',
+              modified  = "",
+              renamed   = "󰁕",
+              staged = '',
+              unmerged = '',
+              unstaged = '',
+              untracked = '',
             },
           },
         },
-      },
-      filters = { dotfiles = true, custom = { '__pycache__' } },
-      on_attach = function(bufnr)
-        require('nvim-tree.api').config.mappings.default_on_attach(bufnr)
-
-        -- disable open in-place (take over filetree window)
-        vim.keymap.del('n', '<C-e>', { buffer = bufnr })
-        vim.keymap.set('n', '<C-e>', '<Nop>', { buffer = bufnr, desc = 'NOP' })
-      end,
-    },
-  },
+        filesystem = {
+          filtered_items = { show_hidden_count = false },
+          use_libuv_file_watcher = true,
+        },
+      }
+    end,
+  }
 }
