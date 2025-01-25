@@ -10,6 +10,7 @@ local specs = {
   { 'dylon/vim-antlr' },
   { 'bfrg/vim-cpp-modern' },
   { 'elkasztano/nushell-syntax-vim' },
+  { 'HiPhish/jinja.vim' },
   {
     'nvim-treesitter/nvim-treesitter',
     config = function(m, opts)
