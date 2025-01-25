@@ -36,7 +36,13 @@ local base = {
     server_config = {},
   },
   root_markers = {
-    '.bzr', '.git', '.hg', '.root', '.svn', '_darcs', 'package.json',
+    '.bzr',
+    '.git',
+    '.hg',
+    '.root',
+    '.svn',
+    'package.json',
+    '_darcs',
   },
   ignored_filetypes = {
     'NvimTree', 'neo-tree', 'aerial', 'Outline', 'quickfix', 'qf', 'prompt', "SidebarNvim",
