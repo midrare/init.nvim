@@ -93,6 +93,11 @@ M.setup = function()
     end,
   }
 
+  config.keymaps.n['<leader>P'] = {
+    label = 'restart lsp',
+    cmd = '<cmd>LspRestart<cr>',
+  }
+
   config.keymaps.n[' e'] = {
     label = 'definition',
     cmd = function()
