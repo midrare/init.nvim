@@ -56,7 +56,6 @@ return {
         },
         filesystem = {
           filtered_items = { show_hidden_count = false },
-          use_libuv_file_watcher = true,
         },
       }
     end,
