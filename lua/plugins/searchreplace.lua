@@ -23,6 +23,9 @@ config.keymaps.x['<leader>rt'] = {
 config.ignored_filetypes = config.ignored_filetypes or {}
 table.insert(config.ignored_filetypes, 'grug-far')
 
+
+local state = { bufnum = -1 }
+
 return {
   'MagicDuck/grug-far.nvim',
   lazy = true,
@@ -35,6 +38,8 @@ return {
           return
         end
 
+        vim.bo.bufhidden = 'hide'
+        vim.bo.buflisted = false
         vim.keymap.set('n', '<esc>', function()
           pcall(vim.api.nvim_win_close, popup_id, true)
         end)
@@ -42,6 +47,8 @@ return {
         vim.cmd('vsplit')
         local win_id = vim.api.nvim_get_current_win()
 
+        vim.bo.bufhidden = 'hide'
+        vim.bo.buflisted = false
         vim.keymap.set('n', '<esc>', function()
           pcall(vim.api.nvim_win_close, win_id, true)
         end)
@@ -49,8 +56,8 @@ return {
     end, { nargs = 0, range = true })
   end,
   config = {
-    transient = true,
-    windowCreationCommand = 'GrugFarPopup',
+    transient = false,
+    -- windowCreationCommand = 'GrugFarPopup',
     keymaps = {
       abort = '<C-c>',
       close = false,
