@@ -17,6 +17,7 @@ config.ignored_filetypes = config.ignored_filetypes or {}
 table.insert(config.ignored_filetypes, 'neo-tree')
 table.insert(config.ignored_filetypes, 'NvimTree')
 
+
 return {
   {
     'nvim-neo-tree/neo-tree.nvim',
@@ -34,6 +35,34 @@ return {
       return {
         auto_clean_after_session_restore = true,
         open_files_do_not_replace_types = ignore,
+        commands = {
+          add_to_arg_list = function(state, callback)
+            local node = state.tree:get_node()
+            if node and node.path then
+              local path = vim.fn.escape(node.path, ' ')
+              vim.cmd('argadd ' .. path)
+            end
+          end,
+          add_to_arg_list_visual = function(state, selected_nodes, callback)
+            for _, node in pairs(selected_nodes) do
+              local path = vim.fn.escape(node.path, ' ')
+              vim.cmd('argadd ' .. path)
+            end
+          end,
+          remove_from_arg_list = function(state)
+            local node = state.tree:get_node()
+            if node and node.path then
+              local path = vim.fn.escape(node.path, ' ')
+              vim.cmd('silent! argdelete ' .. path)
+            end
+          end,
+          remove_from_arg_list_visual = function(state, selected_nodes, callback)
+            for _, node in ipairs(selected_nodes) do
+              local path = vim.fn.escape(node.path, ' ')
+              vim.cmd('silent! argdelete ' .. path)
+            end
+          end,
+        },
         default_component_configs = {
           modified = {
             symbol = " ",
@@ -56,6 +85,14 @@ return {
         },
         filesystem = {
           filtered_items = { show_hidden_count = false },
+          window = {
+            mappings = {
+              ["="] = "add_to_arg_list",
+              ["+"] = "add_to_arg_list",
+              ["-"] = "remove_from_arg_list",
+              ["_"] = "remove_from_arg_list",
+            },
+          },
         },
       }
     end,
