@@ -33,7 +33,6 @@ return {
 
       return {
         auto_clean_after_session_restore = true,
-        close_if_last_window = true,
         open_files_do_not_replace_types = ignore,
         default_component_configs = {
           modified = {
