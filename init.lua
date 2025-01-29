@@ -37,7 +37,7 @@ require('user.keybinds').setup()
 bootstrap_package_manager()
 
 require('lazy').setup({
-  { 'midrare/hookspace.nvim', branch = 'dev', dev = true },
+  { 'midrare/hookspace.nvim', dev = true },
   { 'midrare/microkasten.nvim', branch = 'dev', dev = true },
   { import = 'plugins' },
 }, {
