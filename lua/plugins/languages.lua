@@ -34,6 +34,7 @@ local specs = {
     end,
     opts = {
       ensure_installed = {
+        'arduino',
         'bash',
         'bibtex',
         'c',
