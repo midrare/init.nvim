@@ -15,7 +15,6 @@ return {
   },
   {
     'midrare/microkasten.nvim',
-    branch = 'dev',
     event = "VeryLazy",
     opts = function(m, opts)
       return {
