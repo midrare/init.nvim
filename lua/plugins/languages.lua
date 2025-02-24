@@ -11,6 +11,7 @@ local specs = {
   { 'bfrg/vim-cpp-modern' },
   { 'elkasztano/nushell-syntax-vim' },
   { 'HiPhish/jinja.vim' },
+  { 'vmchale/dhall-vim' },
   {
     'nvim-treesitter/nvim-treesitter',
     config = function(m, opts)
