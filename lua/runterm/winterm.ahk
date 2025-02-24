@@ -1,5 +1,6 @@
 #Requires AutoHotKey >=2.0
 #NoTrayIcon
+#SingleInstance force
 
 #include "%A_ScriptDir%/naiveargs.ahk"
 
