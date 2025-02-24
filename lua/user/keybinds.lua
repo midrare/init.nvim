@@ -22,6 +22,84 @@ local function random_str(alphabet, len)
   return s
 end
 
+
+local function include_guard(name)
+  if not name or name:match('^%s*$') then
+    local _ = nil
+    name, _ = vim.api.nvim_buf_get_name(0)
+        :gsub('[\\/]+$', '')
+        :gsub('^.*[\\/]+', '')
+        :gsub('^%.*([^%.]+).*', '%1')
+  end
+
+  local name, _ = name
+    :upper()
+    :gsub('[^a-zA-Z0-9]', '_')
+    :gsub('^[^a-zA-Z0-9]+', '')
+    :gsub('[^a-zA-Z0-9]+$', '')
+  local guard = name .. '_H' .. random_str(digits, 8)
+
+
+  -- delete existing include guard if any
+  local lines = vim.api.nvim_buf_get_lines(
+    0, 0, vim.api.nvim_buf_line_count(0), false)
+  if lines == nil then
+    return
+  end
+
+  local ifndef_idx = nil
+  local define_idx = nil
+  for i, line in ipairs(lines) do
+    if line:match('^%s*$') then
+      -- skip blank line
+    elseif line:match('^%s*//.*') then
+      -- skip comment line
+    elseif not ifndef_idx and line:match('^%s*#ifndef%s+.-_H%d+%s*$') then
+      ifndef_idx = i
+    elseif ifndef_idx and line:match('^%s*#define%s+.-_H%d+%s*$') then
+      define_idx = i
+      break
+    else
+      break
+    end
+  end
+
+  local endif_idx = nil
+  for i=#lines, 1, -1 do
+    local line = lines[i]
+    if line:match('^%s*$') then
+      -- skip blank line
+    elseif line:match('^%s*//.*') then
+      -- skip comment line
+    elseif line:match('^%s*#endif%s*//%s*.-_H%d+%s*$') then
+      endif_idx = i
+      break
+    else
+      break
+    end
+  end
+
+  if ifndef_idx ~= nil and define_idx ~= nil and endif_idx ~= nil then
+    vim.api.nvim_buf_set_lines(0, ifndef_idx-1, define_idx, false, {
+      '#ifndef ' .. guard,
+      '#define ' .. guard,
+    })
+    vim.api.nvim_buf_set_lines(0, endif_idx-1, endif_idx, false, {
+      '#endif  // ' .. guard,
+    })
+  else
+    vim.api.nvim_buf_set_lines(0, 0, 0, true, {
+      '#ifndef ' .. guard,
+      '#define ' .. guard,
+      '',
+    })
+    vim.api.nvim_buf_set_lines(0, -1, -1, true, {
+      '',
+      '#endif  // ' .. guard,
+    })
+  end
+end
+
 M.setup = function()
   local config = require('user.config')
 
@@ -57,25 +135,7 @@ M.setup = function()
 
   config.keymaps.n['<leader>ri'] = {
     label = 'include guard',
-    cmd = function()
-      local file_name, _ =
-        vim.api.nvim_buf_get_name(0):gsub('[\\/]+$', ''):gsub('^.*[\\/]+', '')
-      local guard_name, _ = file_name:gsub('^%.*([^%.]+).*', '%1')
-        :upper()
-        :gsub('[^a-zA-Z0-9]', '_')
-        :gsub('^[^a-zA-Z0-9]+', '')
-        :gsub('[^a-zA-Z0-9]+$', '')
-      local guard = guard_name .. '_H' .. random_str(digits, 8)
-      vim.api.nvim_buf_set_lines(0, 0, 0, true, {
-        '#ifndef ' .. guard,
-        '#define ' .. guard,
-        '',
-      })
-      vim.api.nvim_buf_set_lines(0, -1, -1, true, {
-        '',
-        '#endif  // ' .. guard,
-      })
-    end,
+    cmd = include_guard,
   }
 
   config.keymaps.n['<leader>rp'] = {
