@@ -12,6 +12,7 @@ local specs = {
   { 'elkasztano/nushell-syntax-vim' },
   { 'HiPhish/jinja.vim' },
   { 'vmchale/dhall-vim' },
+  { 'jmahler/hla.vim' },
   {
     'nvim-treesitter/nvim-treesitter',
     config = function(m, opts)
