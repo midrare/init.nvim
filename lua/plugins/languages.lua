@@ -60,7 +60,6 @@ local specs = {
         'ninja',
         'norg',
         'ocaml',
-        'org',
         'perl',
         'php',
         'python',
