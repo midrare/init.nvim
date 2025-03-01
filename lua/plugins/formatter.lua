@@ -22,10 +22,10 @@ config.keymaps.n['<leader>ro'] = {
 
 config.formatters = config.formatters or {}
 config.formatters.filetype = config.formatters.filetype or {}
-config.formatters.filetype['c'] = 'clangformat'
+config.formatters.filetype['c'] = 'clang-format'
 config.formatters.filetype['cmake'] = 'cmakeformat'
-config.formatters.filetype['cpp'] = 'clangformat'
-config.formatters.filetype['java'] = 'clangformat'
+config.formatters.filetype['cpp'] = 'clang-format'
+config.formatters.filetype['java'] = 'clang-format'
 config.formatters.filetype['javascript'] = 'prettier'
 config.formatters.filetype['json'] = 'prettier'
 config.formatters.filetype['kotlin'] = 'ktlint'
