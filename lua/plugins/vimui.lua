@@ -17,6 +17,7 @@ return {
     end,
     opts = {
       render = "wrapped-compact",
+      stages = "static",
     },
   },
 }
