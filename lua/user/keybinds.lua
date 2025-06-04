@@ -180,13 +180,6 @@ M.setup = function()
     cmd = vim.lsp.buf.type_definition,
   }
 
-  config.keymaps.n['<c-tab>'] = {
-    label = 'file jump',
-    cmd = function()
-      require('other-nvim').open()
-    end,
-  }
-
   config.keymaps.n['<F11>'] = {
     label = 'fullscreen',
     cmd = function()
