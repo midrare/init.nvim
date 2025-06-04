@@ -55,7 +55,7 @@ return {
       end
     end, { nargs = 0, range = true })
   end,
-  config = {
+  opts = {
     transient = false,
     -- windowCreationCommand = 'GrugFarPopup',
     keymaps = {
