@@ -91,7 +91,7 @@ M.setup = function()
   end
 
   vim.api.nvim_create_autocmd({ 'TextYankPost' }, {
-    callback = vim.highlight.on_yank,
+    callback = vim.hl.on_yank,
     desc = 'flash highlights on yanked text range',
   })
 
