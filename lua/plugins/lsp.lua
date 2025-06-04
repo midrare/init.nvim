@@ -298,13 +298,6 @@ return {
     end
   },
   {
-    'folke/neodev.nvim',
-    priority = 100,
-    opts = {
-      library = { plugins = { "nvim-dap-ui" }, types = true },
-    }
-  },
-  {
     'nvimtools/none-ls.nvim',
     event = "VeryLazy",
     dependencies = 'nvim-lua/plenary.nvim',
