@@ -29,6 +29,7 @@ return {
   { 'lunarvim/darkplus.nvim', priority = 1000, lazy = true },
   { 'akai54/2077.nvim', priority = 1000, lazy = true },
   { 'LunarVim/horizon.nvim', priority = 1000, lazy = true },
+  { 'vague2k/vague.nvim', priority = 1000, lazy = true },
   {
     'pineapplegiant/spaceduck',
     priority = 1000,
