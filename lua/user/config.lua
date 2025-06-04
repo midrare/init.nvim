@@ -33,7 +33,7 @@ local base = {
     ensure_installed = {},
     on_init = {},
     on_attach = {},
-    server_config = {},
+    settings = {},
   },
   root_markers = {
     '.bzr',

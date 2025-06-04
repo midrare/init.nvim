@@ -5,9 +5,9 @@ config.lsp = config.lsp or {}
 config.lsp.ensure_installed = config.lsp.ensure_installed or {}
 config.lsp.on_attach = config.lsp.on_attach or {}
 config.lsp.on_init = config.lsp.on_init or {}
-config.lsp.server_config = config.lsp.server_config or {}
+config.lsp.settings = config.lsp.settings or {}
 
-config.lsp.server_config = vim.tbl_deep_extend("keep", config.lsp.server_config, {
+config.lsp.settings = vim.tbl_deep_extend("keep", config.lsp.settings, {
   Lua = {
     workspace = {
       checkThirdParty = false
@@ -243,27 +243,25 @@ return {
       config.lsp = config.lsp or {}
       config.lsp.on_init = config.lsp.on_init or {}
       config.lsp.on_attach = config.lsp.on_attach or {}
-      config.lsp.server_config = config.lsp.server_config or {}
+      config.lsp.settings = config.lsp.settings or {}
 
-      local function default_handler(server_name)
-        local capabilities = vim.lsp.protocol.make_client_capabilities()
-        local cmp_ok, cmp = pcall(require, 'cmp_nvim_lsp')
-        if cmp_ok and cmp then
-          capabilities = cmp.default_capabilities()
-        end
-
-        require('lspconfig')[server_name].setup({
-          capabilities = capabilities,
-          on_init = fnseq(config.lsp.on_init),
-          on_attach = fnseq(config.lsp.on_attach),
-          settings = config.lsp.server_config or {},
-        })
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
+      local cmp_ok, cmp = pcall(require, 'cmp_nvim_lsp')
+      if cmp_ok and cmp then
+        capabilities = cmp.default_capabilities()
       end
+
+      vim.lsp.config("*", {
+        capabilities = capabilities,
+        on_init = fnseq(config.lsp.on_init),
+        on_attach = fnseq(config.lsp.on_attach),
+        settings = config.lsp.settings or {},
+      })
 
       require("mason").setup(opts)
       require('mason-lspconfig').setup({
         ensure_installed = config.lsp.ensure_installed,
-        handlers = { default_handler },
+        automatic_enable = true,
       })
     end,
   },
