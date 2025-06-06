@@ -6,37 +6,48 @@ config.keymaps = config.keymaps or {}
 config.keymaps.n = config.keymaps.n or {}
 config.keymaps.x = config.keymaps.x or {}
 
-local format = nil
+
+local function format_buf(opts)
+  opts = opts or {}
+
+  local ftype = vim.bo.filetype
+  local fmtt = vim.g["formatter_" .. ftype]
+  if fmtt ~= nil then
+    opts = vim.tbl_deep_extend('force', {
+      formatters = { fmtt },
+    }, opts)
+  end
+
+  local conform = require('conform')
+  conform.format(opts)
+end
+
+
+local function format_range(args)
+  local range = nil
+  if args.count >= 0 then
+    local end_line = vim.api.nvim_buf_get_lines(
+      0,
+      args.line2 - 1,
+      args.line2,
+      true
+    )[1]
+    range = {
+      start = { args.line1, 0 },
+      ["end"] = { args.line2, end_line:len() },
+    }
+  end
+
+  if format_buf ~= nil then
+    format_buf({ range = range })
+  end
+end
+
+
 config.keymaps.n['<leader>ro'] = {
   label = 'reformat',
-  cmd = function()
-    if format ~= nil then
-      format()
-    elseif vim.fn.exists(':Format') then
-      vim.cmd('Format')
-    else
-      vim.lsp.buf.format()
-    end
-  end
+  cmd = format_buf,
 }
-
-config.formatters = config.formatters or {}
-config.formatters.filetype = config.formatters.filetype or {}
-config.formatters.filetype['c'] = 'clang-format'
-config.formatters.filetype['cmake'] = 'cmakeformat'
-config.formatters.filetype['cpp'] = 'clang-format'
-config.formatters.filetype['java'] = 'clang-format'
-config.formatters.filetype['javascript'] = 'prettier'
-config.formatters.filetype['json'] = 'prettier'
-config.formatters.filetype['kotlin'] = 'ktlint'
-config.formatters.filetype['html'] = 'prettier'
-config.formatters.filetype['lua'] = 'stylua'
-config.formatters.filetype['python'] = 'yapf'
-config.formatters.filetype['rust'] = 'rustfmt'
-config.formatters.filetype['sh'] = 'shfmt'
-config.formatters.filetype['toml'] = 'taplo'
-config.formatters.filetype['yaml'] = 'pyaml'
-config.formatters.filetype['zig'] = 'zigfmt'
 
 
 return {
@@ -45,35 +56,11 @@ return {
   cmd = { 'Format' },
   init = function()
     vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
-
-    format = function(opts)
-      opts = opts or {}
-      local ft = vim.bo.filetype
-      local wants = vim.iter({
-        vim.g["formatter_" .. ft] or false,
-        config.formatters.filetype[ft] or false,
-      }):flatten():filter(function(o) return o and true end):totable()
-
-      local conform = require('conform')
-      conform.format(vim.tbl_deep_extend('force', opts, {
-        formatters = wants,
-      }))
-    end
-
-    vim.api.nvim_create_user_command("Format", function(args)
-      local range = nil
-      if args.count >= 0 then
-        local end_line = vim.api.nvim_buf_get_lines(0, args.line2 - 1, args.line2, true)[1]
-        range = {
-          start = { args.line1, 0 },
-          ["end"] = { args.line2, end_line:len() },
-        }
-      end
-
-      if format ~= nil then
-        format({ range = range })
-      end
-    end, { range = true })
+    vim.api.nvim_create_user_command(
+      "Format",
+      format_range,
+      { range = true }
+    )
   end,
   opts = {
     default_format_opts = {
@@ -82,5 +69,24 @@ return {
       stop_after_first = true,
     },
     notify_no_formatters = false,
+    formatters_by_ft = {
+      c = { 'clang-format' },
+      cmake = { 'cmakeformat' },
+      cpp = { 'clang-format' },
+      java = { 'clang-format' },
+      javascript = { 'prettier' },
+      json = { 'prettier' },
+      kotlin = { 'ktlint' },
+      html = { 'prettier' },
+      lua = { 'stylua' },
+      python = { 'black' },
+      ruby = { 'rubocop' },
+      rust = { 'rustfmt' },
+      sh = { 'shfmt' },
+      toml = { 'taplo' },
+      typescript = { 'biome' },
+      yaml = { 'pyaml' },
+      zig = { 'zigfmt' },
+    },
   },
 }
