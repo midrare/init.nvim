@@ -9,6 +9,9 @@ config.lsp.settings = config.lsp.settings or {}
 
 config.lsp.settings = vim.tbl_deep_extend("keep", config.lsp.settings, {
   Lua = {
+    diagnostics = {
+      globals = { 'vim' }
+    },
     workspace = {
       checkThirdParty = false
     }
