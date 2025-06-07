@@ -1,4 +1,7 @@
 return {
+  -- { lazy = true } is a special case supported by lazy.nvim
+  -- https://lazy.folke.io/spec/lazy_loading#-colorschemes
+
   -- creates highlight groups for color schemes that don't support native LSP
   { 'folke/lsp-colors.nvim', priority = 1000, lazy = true },
 
