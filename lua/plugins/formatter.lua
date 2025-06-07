@@ -18,8 +18,10 @@ local function format_buf(opts)
     }, opts)
   end
 
-  local conform = require('conform')
-  conform.format(opts)
+  local conform = prequire('conform')
+  if conform then
+    conform.format(opts)
+  end
 end
 
 

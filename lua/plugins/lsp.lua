@@ -250,8 +250,8 @@ return {
 
       local capabilities = vim.lsp.protocol.make_client_capabilities()
 
-      local cmp_ok, cmp = pcall(require, 'blink.cmp')
-      if cmp_ok and cmp then
+      local cmp = prequire('blink.cmp')
+      if cmp ~= nil then
         capabilities = cmp.get_lsp_capabilities()
       end
 
@@ -262,8 +262,8 @@ return {
         settings = config.lsp.settings or {},
       })
 
-      require("mason").setup(opts)
-      require('mason-lspconfig').setup({
+      prequire("mason").setup(opts)
+      prequire('mason-lspconfig').setup({
         ensure_installed = config.lsp.ensure_installed,
         automatic_enable = true,
       })

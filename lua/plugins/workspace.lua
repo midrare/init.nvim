@@ -52,8 +52,8 @@ return {
       config.lsp.settings = config.lsp.settings or {}
 
       table.insert(config.lsp.on_init, function(client, init_result)
-        local hook_ok, hook = pcall(require, 'hookspace.hooks.lspconfig')
-        if hook_ok and hook then
+        local hook = prequire('hookspace.hooks.lspconfig')
+        if hook ~= nil then
           client.config.settings = vim.tbl_deep_extend(
             "force",
             client.config.settings or {},
@@ -69,16 +69,16 @@ return {
       end)
     end,
     opts = function(m, opts)
-      local _, cwd = pcall(require, 'hookspace.hooks.cwd')
-      local _, env = pcall(require, 'hookspace.hooks.environment')
-      local _, trailblazer = pcall(require, 'hookspace.hooks.trailblazer')
-      local _, session = pcall(require, 'hookspace.hooks.session')
-      local _, lsp = pcall(require, 'hookspace.hooks.lspconfig')
-      local _, formatter = pcall(require, 'hookspace.hooks.formatter')
+      local cwd = prequire('hookspace.hooks.cwd')
+      local env = prequire('hookspace.hooks.environment')
+      local trailblazer = prequire('hookspace.hooks.trailblazer')
+      local session = prequire('hookspace.hooks.session')
+      local lsp = prequire('hookspace.hooks.lspconfig')
+      local formatter = prequire('hookspace.hooks.formatter')
 
       local function runterm_on_open(workspace)
-        local runterm_ok, runterm = pcall(require, 'runterm')
-        if runterm_ok and runterm then
+        local runterm = prequire('runterm')
+        if runterm ~= nil then
           runterm_config = runterm.config()
           local cfg = read_json(workspace.localdir() .. '/runterm.json') or {}
           runterm.setup(vim.tbl_deep_extend('force', runterm.config(), {
@@ -90,8 +90,8 @@ return {
 
       ---@diagnostic disable-next-line: unused-local
       local function runterm_on_close(workspace)
-        local runterm_ok, runterm = pcall(require, 'runterm')
-        if runterm_ok and runterm then
+        local runterm = prequire('runterm')
+        if runterm ~= nil then
           runterm.setup(runterm_config or {})
           runterm_config = nil
         end

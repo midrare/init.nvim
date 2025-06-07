@@ -186,8 +186,8 @@ return {
         opts = { position = 'center', hl = 'Type' },
       })
 
-      local status_ok, hookspace = pcall(require, 'hookspace')
-      if status_ok and hookspace then
+      local hookspace = prequire('hookspace')
+      if hookspace ~= nil then
         table.insert(layout, { type = 'padding', val = 2 })
         table.insert(layout, {
           type = 'group',
@@ -258,8 +258,8 @@ return {
 
               local cwd = vim.loop.cwd()
               ---@diagnostic disable-next-line: redefined-local
-              local status_ok, hookspace = pcall(require, 'hookspace')
-              if status_ok and hookspace then
+              local hookspace = require('hookspace')
+              if hookspace ~= nil then
                 local entries = hookspace.history()
                 for _, entry in ipairs(entries) do
                   if entry.rootdir then

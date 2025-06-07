@@ -31,8 +31,8 @@ return {
   lazy = true,
   init = function(m)
     vim.api.nvim_create_user_command('GrugFarPopup', function(params)
-      local detour_ok, detour = pcall(require, "detour")
-      if detour_ok and detour ~= nil then
+      local detour = prequire("detour")
+      if detour ~= nil then
         local popup_id = detour.Detour()
         if not popup_id then
           return
