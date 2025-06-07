@@ -85,7 +85,7 @@ return {
       sh = { 'shfmt' },
       toml = { 'taplo' },
       typescript = { 'biome' },
-      yaml = { 'pyaml' },
+      yaml = { 'prettier' },
       zig = { 'zigfmt' },
     },
   },
