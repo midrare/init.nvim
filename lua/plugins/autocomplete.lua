@@ -42,73 +42,74 @@ return {
       -- tmux ""
 
       local cmp = require('cmp')
-      return {
-        preselect = cmp.PreselectMode.None,
-        snippet = {
-          expand = function(args)
-            require('luasnip').lsp_expand(args.body)
-          end,
-        },
-        sources = {
-          { name = 'nvim_lsp' },
-          { name = 'luasnip' },
-          { name = 'codeium' },
-          { name = 'buffer',  { sorting = { priority_weight = 0.75 } } },
-          { name = 'path' },
-        },
-        formatting = {
-          format = require('lspkind').cmp_format({
-            mode = 'symbol',
-            maxwidth = 50,
-          }),
-        },
-        mapping = cmp.mapping.preset.insert({
-          ['<c-b>'] = cmp.mapping(function(fallback)
-            scroll(-16)
-          end),
-          ['<c-f>'] = cmp.mapping(function(fallback)
-            scroll(16)
-          end),
-          ['<c-u>'] = cmp.mapping(function(fallback)
-            scroll(-8)
-          end),
-          ['<c-d>'] = cmp.mapping(function(fallback)
-            scroll(8)
-          end),
-          ['<c-spc>'] = cmp.mapping.complete(),
-          ['<c-e>'] = cmp.mapping.abort(),
-          ['<esc>'] = cmp.mapping(function(fallback)
-            cmp.abort()
-            fallback()
-          end),
-          ['<cr>'] = cmp.mapping.confirm({ select = false }),
-          ['<tab>'] = cmp.mapping(function(fallback)
-            local function check_backspace()
-              local col = vim.fn.col('.') - 1
-              return col == 0 or vim.fn.getline('.'):sub(col, col):match('%s')
-            end
 
-            local _, luasnip = pcall(require, 'luasnip')
-            if cmp.visible() then
-              cmp.select_next_item()
-            elseif luasnip and luasnip.expand_or_jumpable() then
-              luasnip.expand_or_jump()
-            else
-              fallback()
-            end
-          end, { 'i', 's' }),
-          ['<S-tab>'] = cmp.mapping(function(fallback)
-            local _, luasnip = pcall(require, 'luasnip')
-            if cmp.visible() then
-              cmp.select_prev_item()
-            elseif luasnip and luasnip.jumpable(-1) then
-              luasnip.jump(-1)
-            else
-              fallback()
-            end
-          end, { 'i', 's' }),
+      opts.preselect = cmp.PreselectMode.None
+      opts.snippet = {
+        expand = function(args)
+          require('luasnip').lsp_expand(args.body)
+        end,
+      }
+      opts.sources = {
+        { name = 'nvim_lsp' },
+        { name = 'lazydev', group_index = 0 },
+        { name = 'luasnip' },
+        { name = 'codeium' },
+        { name = 'buffer',  { sorting = { priority_weight = 0.75 } } },
+        { name = 'path' },
+      }
+      opts.formatting = {
+        format = require('lspkind').cmp_format({
+          mode = 'symbol',
+          maxwidth = 50,
         }),
       }
+      opts.mapping = cmp.mapping.preset.insert({
+        ['<c-b>'] = cmp.mapping(function(fallback)
+          scroll(-16)
+        end),
+        ['<c-f>'] = cmp.mapping(function(fallback)
+          scroll(16)
+        end),
+        ['<c-u>'] = cmp.mapping(function(fallback)
+          scroll(-8)
+        end),
+        ['<c-d>'] = cmp.mapping(function(fallback)
+          scroll(8)
+        end),
+        ['<c-spc>'] = cmp.mapping.complete(),
+        ['<c-e>'] = cmp.mapping.abort(),
+        ['<esc>'] = cmp.mapping(function(fallback)
+          cmp.abort()
+          fallback()
+        end),
+        ['<cr>'] = cmp.mapping.confirm({ select = false }),
+        ['<tab>'] = cmp.mapping(function(fallback)
+          local function check_backspace()
+            local col = vim.fn.col('.') - 1
+            return col == 0 or vim.fn.getline('.'):sub(col, col):match('%s')
+          end
+
+          local _, luasnip = pcall(require, 'luasnip')
+          if cmp.visible() then
+            cmp.select_next_item()
+          elseif luasnip and luasnip.expand_or_jumpable() then
+            luasnip.expand_or_jump()
+          else
+            fallback()
+          end
+        end, { 'i', 's' }),
+        ['<S-tab>'] = cmp.mapping(function(fallback)
+          local _, luasnip = pcall(require, 'luasnip')
+          if cmp.visible() then
+            cmp.select_prev_item()
+          elseif luasnip and luasnip.jumpable(-1) then
+            luasnip.jump(-1)
+          else
+            fallback()
+          end
+        end, { 'i', 's' }),
+      })
+
     end,
   },
   dependencies = {
