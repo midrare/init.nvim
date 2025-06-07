@@ -249,9 +249,10 @@ return {
       config.lsp.settings = config.lsp.settings or {}
 
       local capabilities = vim.lsp.protocol.make_client_capabilities()
-      local cmp_ok, cmp = pcall(require, 'cmp_nvim_lsp')
+
+      local cmp_ok, cmp = pcall(require, 'blink.cmp')
       if cmp_ok and cmp then
-        capabilities = cmp.default_capabilities()
+        capabilities = cmp.get_lsp_capabilities()
       end
 
       vim.lsp.config("*", {
