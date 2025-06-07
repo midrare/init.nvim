@@ -3,7 +3,7 @@ local moduletitle = 'init.lua'
 ---@diagnostic disable-next-line: lowercase-global
 function prequire(plugin)
   local name = plugin:match('^.+[\\/](.+)') or plugin
-  local is_ok, mod = pcall(require, name)
+  local is_ok, mod = pcall(require, plugin)
   if not is_ok then
     local msg = 'Failed to require("' .. name .. '")'
     vim.notify(msg, vim.log.levels.ERROR, { title = moduletitle })
