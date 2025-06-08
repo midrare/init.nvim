@@ -9,23 +9,10 @@ return {
       completion = { documentation = { auto_show = true } },
       sources = {
         default = { 'lsp', 'path', 'snippets', 'buffer' },
-        providers = {
-          codeium = {
-            name = 'Codeium',
-            module = 'codeium.blink',
-            async = true,
-          },
-        },
       },
       fuzzy = { implementation = "prefer_rust_with_warning" }
     },
     opts_extend = { "sources.default" }
   },
   { 'onsails/lspkind.nvim' },
-  {
-    "Exafunction/windsurf.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    name = 'codeium',
-    opts = { enable_cmp_source = false },
-  }
 }
