@@ -100,6 +100,55 @@ local function include_guard(name)
   end
 end
 
+
+local function lsp_rename(opts)
+  local opts = opts or {}
+
+  local client_names = {}
+  for _, client in ipairs(vim.lsp.get_clients({ bufnr = 0 })) do
+    if client:supports_method("textDocument/rename") then
+      table.insert(client_names, client.name)
+    end
+  end
+  table.sort(client_names)
+
+  print(vim.inspect(client_names))
+
+  if opts.priority ~= nil then
+    for _, client_priority in ipairs(opts.priority) do
+      for _, client_name in ipairs(client_names) do
+        if client_priority == client_name then
+          vim.lsp.buf.rename(nil, { name = client_name })
+          return
+        end
+      end
+    end
+  end
+
+  if opts.select and #client_names > 1 then
+    local function on_client_selected(client_name)
+      if client_name then
+        vim.lsp.buf.rename(nil, { name = client_name })
+        return
+      end
+    end
+
+    vim.ui.select(
+      client_names,
+      { prompt = "LSP client for rename" },
+      on_client_selected
+    )
+
+    return
+  end
+
+  for _, client_name in ipairs(client_names) do
+    vim.lsp.buf.rename(nil, { name = client_name })
+    return
+  end
+end
+
+
 M.setup = function()
   local config = require('user.config')
 
@@ -124,9 +173,13 @@ M.setup = function()
     cmd = '<cmd>Telescope git_branches<cr>',
   }
 
+  config.keymaps.n['grn'] = {
+    label = 'rename',
+    cmd = lsp_rename or vim.lsp.buf.rename,
+  }
   config.keymaps.n['<leader>rr'] = {
     label = 'rename',
-    cmd = vim.lsp.buf.rename,
+    cmd = lsp_rename or vim.lsp.buf.rename,
   }
   config.keymaps.n['<leader>ra'] = {
     label = 'code action',
