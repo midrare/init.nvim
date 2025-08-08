@@ -82,7 +82,7 @@ return {
       kotlin = { 'ktlint' },
       html = { 'prettier' },
       lua = { 'stylua' },
-      python = { 'black' },
+      python = { 'isort', 'black', stop_after_first = false },
       ruby = { 'rubocop' },
       rust = { 'rustfmt' },
       sh = { 'shfmt' },
