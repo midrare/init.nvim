@@ -5,7 +5,13 @@ config.keymaps.n = config.keymaps.n or {}
 config.keymaps.x = config.keymaps.x or {}
 
 config.keymaps.n['gcb'] = {
-  label = 'banner',
+  label = 'line',
+  cmd = function()
+    require('comment-box').llline()
+  end,
+}
+config.keymaps.n['gcB'] = {
+  label = 'box',
   cmd = function()
     require('comment-box').llbox()
   end,
@@ -46,6 +52,6 @@ return {
     'danymat/neogen',
     lazy = true,
     dependencies = 'nvim-treesitter/nvim-treesitter',
-    opts = { snippet_engine = 'luasnip' }
+    config = true,
   }
 }
