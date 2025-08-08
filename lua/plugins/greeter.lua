@@ -327,7 +327,7 @@ return {
       table.insert(layout, {
         type = 'group',
         val = function()
-          local button = dashboard.button(
+          local plugup_btn = dashboard.button(
             'U',
             '󰑐  Update',
             ([[<cmd>lua
@@ -360,12 +360,23 @@ return {
           end<cr>]]):gsub('\n', ' '),
             nil
           )
-          button.opts.hl = {}
+          plugup_btn.opts.hl = {}
+
+          local theme_btn = dashboard.button(
+            'M',
+            '  Theme',
+            ([[<cmd>lua
+          if vim.fn.exists(":Themery") == 2 then
+            vim.cmd("Themery")
+          end<cr>]]):gsub('\n', ' '),
+            nil
+          )
+          plugup_btn.opts.hl = {}
 
           return {
             {
               type = 'group',
-              val = { button },
+              val = { plugup_btn, theme_btn },
               opts = {},
             },
           }

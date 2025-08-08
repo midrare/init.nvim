@@ -36,6 +36,10 @@ require('user.keybinds').setup()
 
 bootstrap_package_manager()
 
+if config.colorscheme then
+  vim.cmd('colorscheme ' .. config.colorscheme)
+end
+
 require('lazy').setup({
   { 'midrare/hookspace.nvim', dev = true },
   { 'midrare/altarfile.nvim', dev = true },
@@ -51,10 +55,6 @@ require('lazy').setup({
     and config.max_downloads
   ) or nil,
 })
-
-if config.colorscheme then
-  vim.cmd('colorscheme ' .. config.colorscheme)
-end
 
 -- "https://github.com/neovim/neovim/issues/16646
 -- "let &shell = ""C:/Program Files/nu/bin/nu.exe""
