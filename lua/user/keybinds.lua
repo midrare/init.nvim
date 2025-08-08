@@ -112,8 +112,6 @@ local function lsp_rename(opts)
   end
   table.sort(client_names)
 
-  print(vim.inspect(client_names))
-
   if opts.priority ~= nil then
     for _, client_priority in ipairs(opts.priority) do
       for _, client_name in ipairs(client_names) do
