@@ -13,9 +13,10 @@ local function format_buf(opts)
   local ftype = vim.bo.filetype
   local fmtt = vim.g["formatter_" .. ftype]
   if fmtt ~= nil then
-    opts = vim.tbl_deep_extend('force', {
-      formatters = { fmtt },
-    }, opts)
+    fmtt = vim.fn.flatten({ fmtt })
+    opts = vim.tbl_deep_extend('force', {}, opts)
+    opts.formatters = fmtt
+    opts.stop_after_first = false
   end
 
   local conform = prequire('conform')
