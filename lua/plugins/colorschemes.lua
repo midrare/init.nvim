@@ -22,7 +22,6 @@ return {
   { 'Abstract-IDE/Abstract-cs', priority = 1000, lazy = true },
   { 'AhmedAbdulrahman/aylin.vim', priority = 1000, lazy = true },
   { 'heraldofsolace/nisha-vim', priority = 1000, lazy = true },
-  { 'adisen99/codeschool.nvim', priority = 1000, lazy = true },
   { 'aswathkk/DarkScene.vim', priority = 1000, lazy = true },
   { 'mhinz/vim-janah', priority = 1000, lazy = true },
   { 'flrnd/candid.vim', priority = 1000, lazy = true },
