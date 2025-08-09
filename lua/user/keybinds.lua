@@ -22,14 +22,14 @@ local function random_str(alphabet, len)
   return s
 end
 
-
 local function include_guard(name)
   if not name or name:match('^%s*$') then
     local _ = nil
-    name, _ = vim.api.nvim_buf_get_name(0)
-        :gsub('[\\/]+$', '')
-        :gsub('^.*[\\/]+', '')
-        :gsub('^%.*([^%.]+).*', '%1')
+    name, _ = vim.api
+      .nvim_buf_get_name(0)
+      :gsub('[\\/]+$', '')
+      :gsub('^.*[\\/]+', '')
+      :gsub('^%.*([^%.]+).*', '%1')
   end
 
   local name, _ = name
@@ -39,10 +39,9 @@ local function include_guard(name)
     :gsub('[^a-zA-Z0-9]+$', '')
   local guard = name .. '_H' .. random_str(digits, 8)
 
-
   -- delete existing include guard if any
-  local lines = vim.api.nvim_buf_get_lines(
-    0, 0, vim.api.nvim_buf_line_count(0), false)
+  local lines =
+    vim.api.nvim_buf_get_lines(0, 0, vim.api.nvim_buf_line_count(0), false)
   if lines == nil then
     return
   end
@@ -65,7 +64,7 @@ local function include_guard(name)
   end
 
   local endif_idx = nil
-  for i=#lines, 1, -1 do
+  for i = #lines, 1, -1 do
     local line = lines[i]
     if line:match('^%s*$') then
       -- skip blank line
@@ -80,11 +79,11 @@ local function include_guard(name)
   end
 
   if ifndef_idx ~= nil and define_idx ~= nil and endif_idx ~= nil then
-    vim.api.nvim_buf_set_lines(0, ifndef_idx-1, define_idx, false, {
+    vim.api.nvim_buf_set_lines(0, ifndef_idx - 1, define_idx, false, {
       '#ifndef ' .. guard,
       '#define ' .. guard,
     })
-    vim.api.nvim_buf_set_lines(0, endif_idx-1, endif_idx, false, {
+    vim.api.nvim_buf_set_lines(0, endif_idx - 1, endif_idx, false, {
       '#endif  // ' .. guard,
     })
   else
