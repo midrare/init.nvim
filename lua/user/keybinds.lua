@@ -100,52 +100,101 @@ local function include_guard(name)
   end
 end
 
-
-local function lsp_rename(opts)
-  local opts = opts or {}
+local function select_lsp_client_name(method, opts)
+  local opts = vim.tbl_deep_extend('force', {}, opts or {})
 
   local client_names = {}
   for _, client in ipairs(vim.lsp.get_clients({ bufnr = 0 })) do
-    if client:supports_method("textDocument/rename") then
+    if client:supports_method(method) then
       table.insert(client_names, client.name)
     end
   end
   table.sort(client_names)
 
-  if opts.priority ~= nil then
-    for _, client_priority in ipairs(opts.priority) do
-      for _, client_name in ipairs(client_names) do
-        if client_priority == client_name then
-          vim.lsp.buf.rename(nil, { name = client_name })
-          return
-        end
+  if type(opts.priority) == 'string' then
+    if vim.list_contains(client_names, opts.priority) then
+      return opts.priority
+    end
+  elseif type(opts.priority) == 'table' then
+    for _, client_name in ipairs(opts.priority) do
+      if vim.list_contains(client_names, client_name) then
+        return client_name
       end
     end
   end
 
-  if opts.select and #client_names > 1 then
-    local function on_client_selected(client_name)
-      if client_name then
-        vim.lsp.buf.rename(nil, { name = client_name })
-        return
-      end
-    end
+  if opts.select ~= nil and opts.select and #client_names > 1 then
+    local state = {}
+    state.client_name = nil
+    vim.ui.select(client_names, { prompt = 'LSP client' }, function(client)
+      state.client_name = client
+    end)
 
-    vim.ui.select(
-      client_names,
-      { prompt = "LSP client for rename" },
-      on_client_selected
+    return state.client_name
+  end
+
+  if
+    opts.select == nil
+    and #client_names > 1
+    and (opts.warn == nil or opts.warn)
+  then
+    vim.notify(
+      'More than one LSP client supporting '
+        .. method
+        .. ' found. Defaulting to first client ('
+        .. client_names[1]
+        .. '). '
+        .. 'To show client picker, pass { opts.select = true }.',
+      vim.log.levels.WARN,
+      { title = modulename }
     )
-
-    return
   end
 
-  for _, client_name in ipairs(client_names) do
-    vim.lsp.buf.rename(nil, { name = client_name })
-    return
+  if client_names ~= nil and #client_names >= 1 then
+    return client_names[1]
   end
+
+  return nil
 end
 
+local function lsp(fn, method, opts)
+  local opts = vim.tbl_deep_extend('force', {}, opts or {})
+
+  local function exec(...)
+    local client_name = select_lsp_client_name(method, opts)
+    opts.warn = false
+
+    local args = { { name = client_name } }
+    local nargs = select('#', ...)
+
+    if nargs > 0 and type(select(nargs, ...)) == 'table' then
+      -- HACK last argument is not guaranteed to be opts table
+      args = { n = select('#', ...), ... }
+      args[#args] = vim.tbl_deep_extend('force', opts, args[#args])
+      args[#args].name = client_name
+    elseif nargs > 0 then
+      args = { n = select('#', ...), ... }
+      table.insert(args, { name = client_name })
+    end
+
+    fn((unpack or table.unpack)(args))
+  end
+
+  return exec
+end
+
+local function bake(fn, ...)
+  local args = {}
+
+  if select('#', ...) > 0 then
+    args = { n = select('#', ...), ... }
+  end
+
+  return function()
+    ---@diagnostic disable-next-line: undefined-global
+    fn((unpack or table.unpack)(args))
+  end
+end
 
 M.setup = function()
   local config = require('user.config')
@@ -173,15 +222,18 @@ M.setup = function()
 
   config.keymaps.n['grn'] = {
     label = 'rename',
-    cmd = lsp_rename or vim.lsp.buf.rename,
+    cmd = lsp(bake(vim.lsp.buf.rename, nil), 'textDocument/rename')
+      or vim.lsp.buf.rename,
   }
   config.keymaps.n['<leader>rr'] = {
     label = 'rename',
-    cmd = lsp_rename or vim.lsp.buf.rename,
+    cmd = lsp(bake(vim.lsp.buf.rename, nil), 'textDocument/rename')
+      or vim.lsp.buf.rename,
   }
   config.keymaps.n['<leader>ra'] = {
     label = 'code action',
-    cmd = vim.lsp.buf.code_action,
+    cmd = lsp(vim.lsp.buf.code_action, 'textDocument/codeAction')
+      or vim.lsp.buf.code_action,
   }
 
   config.keymaps.n['<leader>ri'] = {
@@ -211,24 +263,28 @@ M.setup = function()
 
   config.keymaps.n[' e'] = {
     label = 'definition',
-    cmd = function()
-      vim.lsp.buf.definition({ reuse_win = true })
-    end,
+    cmd = lsp(
+      vim.lsp.buf.definition,
+      'textDocument/definition',
+      { reuse_win = true }
+    ) or vim.lsp.buf.definition,
   }
 
   config.keymaps.n[' q'] = {
     label = 'inline docs',
-    cmd = vim.lsp.buf.hover,
+    cmd = lsp(vim.lsp.buf.hover, 'textDocument/hover') or vim.lsp.buf.hover,
   }
 
   config.keymaps.n[' s'] = {
     label = 'signature',
-    cmd = vim.lsp.buf.signature_help,
+    cmd = lsp(vim.lsp.buf.signature_help, 'signatureHelpProvider')
+      or vim.lsp.buf.signature_help,
   }
 
   config.keymaps.n[' t'] = {
     label = 'type',
-    cmd = vim.lsp.buf.type_definition,
+    cmd = lsp(vim.lsp.buf.type_definition, 'textDocument/typeDefinition')
+      or vim.lsp.buf.type_definition,
   }
 
   config.keymaps.n['<F11>'] = {
