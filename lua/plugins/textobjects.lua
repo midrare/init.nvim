@@ -1,11 +1,16 @@
 return {
   {
     'wellle/targets.vim',
-    event = "VeryLazy",
+    event = 'VeryLazy',
+  },
+  {
+    'kana/vim-textobj-entire',
+    event = 'VeryLazy',
+    dependencies = 'kana/vim-textobj-user',
   },
   {
     'Julian/vim-textobj-variable-segment',
-    event = "VeryLazy",
+    event = 'VeryLazy',
     dependencies = 'kana/vim-textobj-user',
-  }
+  },
 }
