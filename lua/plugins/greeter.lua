@@ -211,7 +211,8 @@ return {
                 for i = 1, math.min(max_section_items, #entries) do
                   local e = entries[i]
                   local meta = hookspace.info(e.rootdir)
-                  local label = (meta and meta.name) or paths.basename(e.rootdir)
+                  local label = (meta and meta.name)
+                    or paths.basename(e.rootdir)
                   label = to_elided(label, max_section_width)
                   local cmd = "<cmd>lua require('hookspace').open('"
                     .. e.rootdir:gsub('\\', '\\\\')
@@ -263,7 +264,10 @@ return {
                 local entries = hookspace.history()
                 for _, entry in ipairs(entries) do
                   if entry.rootdir then
-                    table.insert(ignored_roots, paths.canonical(entry.rootdir, cwd))
+                    table.insert(
+                      ignored_roots,
+                      paths.canonical(entry.rootdir, cwd)
+                    )
                   end
                 end
               end
@@ -285,7 +289,9 @@ return {
                     if vim.fn.has('win32') > 0 then
                       root = root:lower()
                     end
-                    if #canonical >= #root and canonical:sub(1, #root) == root then
+                    if
+                      #canonical >= #root and canonical:sub(1, #root) == root
+                    then
                       return false
                     end
                   end
@@ -306,7 +312,8 @@ return {
                 local label = to_elided_filepath(filepath, max_section_width)
                 local shortcut = 'f' .. tostring(i - 1)
                 local cmd = '<cmd>e ' .. filepath .. '<cr>'
-                local button = create_file_button(filepath, shortcut, label, cmd)
+                local button =
+                  create_file_button(filepath, shortcut, label, cmd)
                 table.insert(group, button)
               end
 
@@ -338,7 +345,7 @@ return {
             vim.cmd("PackerSync")
           end
           if vim.fn.exists(":Lazy") == 2 then
-            vim.cmd("Lazy sync")
+            require("lazy").sync({ wait = true })
           end
           if vim.fn.exists(":Neopm") == 2 then
             vim.cmd("Neopm install")
@@ -353,11 +360,13 @@ return {
           if vim.fn.exists(":PlugUpdate") == 2 then
             vim.cmd("PlugUpdate")
           end
-
-          local treesitter_ok, treesitter = pcall(require, "treesitter")
-          if treesitter_ok and treesitter then
-            treesitter.update({ with_sync = true })
-          end<cr>]]):gsub('\n', ' '),
+          if vim.fn.exists(":MasonUpdate") == 2 then
+            vim.cmd("MasonUpdate")
+          end
+          if vim.fn.exists(":TSUpdate") == 2 then
+            vim.cmd("TSUpdate")
+          end
+          <cr>]]):gsub('\n', ' '),
             nil
           )
           plugup_btn.opts.hl = {}
@@ -388,6 +397,6 @@ return {
         layout = layout,
         opts = { margin = 5, noautocmd = true },
       }
-    end
-  }
+    end,
+  },
 }
