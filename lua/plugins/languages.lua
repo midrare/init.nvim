@@ -14,6 +14,7 @@ local specs = {
   { 'jmahler/hla.vim' },
   {
     'nvim-treesitter/nvim-treesitter',
+    branch = 'main', -- master is deprecated
     opts = {
       ensure_installed = {
         'arduino',
