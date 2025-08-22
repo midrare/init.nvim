@@ -84,7 +84,8 @@ return {
   },
   {
     'zaldih/themery.nvim',
-    lazy = false,
+    lazy = true,
+    cmd = "Themery",
     opts = {
       themes = {
         '2077',
