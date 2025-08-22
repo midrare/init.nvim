@@ -96,6 +96,9 @@ local specs = {
       indent = { enable = true },
       highlight = { enable = true, additional_vim_regex_highlighting = true },
       matchup = { enable = true, include_match_words = true },
+      lazy = false,
+      build = ":TSUpdate",
+      sync_install = true,
     },
   },
   {
