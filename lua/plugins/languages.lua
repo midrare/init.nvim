@@ -5,7 +5,6 @@ vim.g.polyglot_disabled = vim.list_extend(
   { 'c', 'cpp', 'markdown', 'norg', 'lua', 'ftdetect' }
 )
 
-
 local specs = {
   { 'dylon/vim-antlr' },
   { 'bfrg/vim-cpp-modern' },
@@ -115,7 +114,6 @@ local specs = {
       matchup = { enable = true, include_match_words = true },
     },
   },
-  { 'nvim-treesitter/nvim-treesitter-textobjects' },
   {
     'tpope/vim-markdown',
     config = function(m, opts)
