@@ -95,3 +95,4 @@ folke/todo-comments.nvim
 petertriho/nvim-scrollbar
 mhinz/vim-signify
 LeonHeidelbach/trailblazer.nvim
+andymass/vim-matchup
