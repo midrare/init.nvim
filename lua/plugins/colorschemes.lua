@@ -86,6 +86,9 @@ return {
     'zaldih/themery.nvim',
     lazy = true,
     cmd = "Themery",
+    init = function()
+      vim.g.themery = 1
+    end,
     opts = {
       themes = {
         '2077',

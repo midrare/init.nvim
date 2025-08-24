@@ -84,24 +84,26 @@ require('lazy').setup({
 })
 
 while true do
-  local themery = read_json(
-    vim.fn.stdpath("data")
-    .. path_sep
-    .. "themery"
-    .. path_sep
-    .. "state.json"
-  ) or {}
+  if vim.g.themery ~= nil and vim.g.themery > 0 then
+    local themery = read_json(
+      vim.fn.stdpath("data")
+      .. path_sep
+      .. "themery"
+      .. path_sep
+      .. "state.json"
+    ) or {}
 
-  if themery and themery.colorscheme then
-    local color_ok, _ = pcall(vim.cmd, 'colorscheme ' .. themery.colorscheme)
-    if color_ok then
-      break
-    else
-      vim.notify(
-        "Failed to load color scheme " .. themery.colorscheme,
-        vim.log.levels.ERROR,
-        { title = moduletitle }
-      )
+    if themery and themery.colorscheme then
+      local color_ok, _ = pcall(vim.cmd, 'colorscheme ' .. themery.colorscheme)
+      if color_ok then
+        break
+      else
+        vim.notify(
+          "Failed to load color scheme " .. themery.colorscheme,
+          vim.log.levels.ERROR,
+          { title = moduletitle }
+        )
+      end
     end
   end
 
