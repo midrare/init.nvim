@@ -1,23 +1,27 @@
-local config = require("user.config")
+local config = require('user.config')
 config.telescope = config.telescope or {}
 config.telescope.extensions = config.telescope.extensions or {}
-table.insert(config.telescope.extensions, 'notify')
 
 return {
   {
-    'stevearc/dressing.nvim',
-    event = 'VeryLazy',
-    config = true,
-  },
-  {
-    'rcarriga/nvim-notify',
-    event = "VimEnter",
+    'folke/snacks.nvim',
+    priority = 1000,
+    lazy = false,
     init = function()
-      vim.notify = require("notify")
+      vim.api.nvim_create_user_command(
+        "NotificationHistory",
+        function()
+          local notifier = prequire("snacks.notifier")
+          if notifier ~= nil then
+            notifier.show_history()
+          end
+        end,
+        {}
+      )
     end,
     opts = {
-      render = "wrapped-compact",
-      stages = "static",
+      notifier = { style = 'compact' },
+      input = {},
     },
   },
 }
