@@ -1,4 +1,4 @@
-local config = require("user.config")
+local config = require('user.config')
 
 config.keymaps = config.keymaps or {}
 config.keymaps.n = config.keymaps.n or {}
@@ -17,8 +17,11 @@ config.keymaps.n['<leader>db'] = {
 config.keymaps.n['<leader>dB'] = {
   label = 'logpoint',
   cmd = function()
-    require('dap').toggle_breakpoint(nil, nil,
-      vim.fn.input('Log point message: '))
+    require('dap').toggle_breakpoint(
+      nil,
+      nil,
+      vim.fn.input('Log point message: ')
+    )
   end,
 }
 config.keymaps.n['<leader>dc'] = {
@@ -60,10 +63,9 @@ config.keymaps.n['<leader>dr'] = {
 config.keymaps.n['<leader>dm'] = {
   label = 'debugger ui',
   cmd = function()
-    require('dapui').toggle()
+    require('dap-view').open()
   end,
 }
-
 
 vim.fn.sign_define(
   'DapBreakpoint',
@@ -86,7 +88,6 @@ vim.fn.sign_define(
   { text = '', texthl = '', linehl = '', numhl = '' }
 )
 
-
 return {
   {
     'mfussenegger/nvim-dap',
@@ -102,7 +103,7 @@ return {
         .. '.vscode'
         .. path_sep
         .. 'extensions'
-      require("dap").configurations.cpp = {
+      require('dap').configurations.cpp = {
         id = 'cppdbg',
         type = 'executable',
         command = vscode
@@ -118,18 +119,49 @@ return {
           detached = false,
         },
       }
-    end
+    end,
   },
   {
-    'rcarriga/nvim-dap-ui',
-    event = "VeryLazy",
+    'igorlfs/nvim-dap-view',
+    lazy = true,
+    init = function()
+      vim.api.nvim_create_autocmd('FileType', {
+        pattern = 'dap-*',
+        callback = function(args)
+          for _, key in ipairs({
+            '<tab>',
+            '<c-tab>',
+            '<right>',
+            ']b',
+            ']v',
+            '}',
+          }) do
+            vim.keymap.set('n', key, function()
+              require('dap-view').navigate({
+                count = vim.v.count1,
+                wrap = true,
+              })
+            end, { buffer = args.buf, desc = 'next view' })
+          end
+
+          for _, key in ipairs({
+            '<s-tab>',
+            '<c-s-tab>',
+            '<left>',
+            '[b',
+            '[v',
+            '{',
+          }) do
+            vim.keymap.set('n', key, function()
+              require('dap-view').navigate({
+                count = -vim.v.count1,
+                wrap = true,
+              })
+            end, { buffer = args.buf, desc = 'prev view' })
+          end
+        end,
+      })
+    end,
     config = true,
-    dependencies = { 'mfussenegger/nvim-dap', 'nvim-neotest/nvim-nio' },
   },
-  {
-    'theHamsta/nvim-dap-virtual-text',
-    event = "VeryLazy",
-    config = true,
-    dependencies = { 'mfussenegger/nvim-dap' },
-  }
 }
