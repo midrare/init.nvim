@@ -90,7 +90,10 @@ return {
           },
         },
         filesystem = {
-          filtered_items = { show_hidden_count = false },
+          filtered_items = {
+            show_hidden_count = false,
+            ignore_files = { ".neotreeignore" },
+          },
           window = {
             mappings = {
               ["="] = "add_to_arg_list",
