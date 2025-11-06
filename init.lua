@@ -68,8 +68,6 @@ bootstrap_package_manager()
 
 require('lazy').setup({
   { 'midrare/hookspace.nvim', dev = true },
-  { 'midrare/altarfile.nvim', dev = true },
-  { 'midrare/regex.nvim', dev = true },
   { import = 'plugins' },
 }, {
   dev = { path = config.devpath, fallback = true },
