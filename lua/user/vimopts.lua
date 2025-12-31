@@ -90,10 +90,12 @@ M.setup = function()
     end
   end
 
-  vim.api.nvim_create_autocmd({ 'TextYankPost' }, {
-    callback = vim.hl.on_yank,
-    desc = 'flash highlights on yanked text range',
-  })
+  if vim.hl ~= nil and vim.hl.on_yank ~= nil then
+    vim.api.nvim_create_autocmd({ 'TextYankPost' }, {
+      callback = vim.hl.on_yank,
+      desc = 'flash highlights on yanked text range',
+    })
+  end
 
   -- https://github.com/neovim/neovim/issues/16646
   -- vim.opt.shell = "C:/Program Files/nu/bin/nu.exe"
